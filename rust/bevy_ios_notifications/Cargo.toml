@@ -1,0 +1,16 @@
+[package]
+name = "bevy_ios_notifications"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = { version = "0.13", default-features = false }
+prost = "0.12"
+builder-pattern = { version = "0.4", default-features = false }
+
+[target.'cfg(target_os = "ios")'.dependencies]
+bevy_crossbeam_event = "0.5"
+block2 = "0.5"
+
+[build-dependencies]
+prost-build = { version = "0.12" }

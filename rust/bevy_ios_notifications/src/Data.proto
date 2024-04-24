@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package bevy_ios.notifications;
+
+message NotificationId {
+    string identifier = 1;
+}
+
+message Request {
+    message Schedule {
+
+        message Trigger {
+            bool repeat = 1;
+            double seconds = 2;
+        }
+
+        string title = 1;
+        string body = 2;
+        string categoryIdentifier = 3;
+        string subtitle = 4;
+        double relevanceScore = 5;
+        string threadIdentifier = 6;
+        
+        optional string filterCriteria = 7;
+        optional UserData userData = 8;
+
+        optional string identifier = 9;
+        optional int32 badge = 10;
+
+        optional Trigger trigger = 11;
+    }
+
+    message Pending {}
+
+    message RemoveAllPending {}
+
+    message RemoveAllDelivered {}
+
+    message RemovePending {
+        repeated NotificationId items = 1;
+    }
+
+    message Permissions {
+        bool alert = 1;
+        bool sound = 2;
+        bool badge = 3;
+    }
+
+    oneof calls {
+        Permissions permissions = 1;
+        Schedule schedule = 2;
+        Pending pending = 3;
+        // RemovePending removePending = 4;
+        RemoveAllPending removeAllPending = 5;
+        RemoveAllDelivered removeAllDelivered = 6;
+    }
+}
+
+message UserData {
+    map<string, string> data = 1;
+}
+
+message Response {
+    message Schedule {
+        string identifier = 1;
+    }
+
+    message Pending {}
+
+    oneof calls {
+        Schedule schedule = 1;
+        Pending pending = 2;
+    }
+}
+
+message AsyncEvent {
+    message Pending {
+        message PendingNotification {
+            string identifier = 1;
+        }
+    
+        repeated PendingNotification items = 1;
+    }
+
+    message Scheduled {
+        string identifier = 1;
+        bool success = 2;
+        string error = 3;
+    }
+
+    message Permission {
+        bool granted = 1;
+    }
+
+    message NotificationResponse {
+        string identifier = 1;
+        string actionIdentifier = 2;
+    }
+
+    message NotificationWhileRunning {
+        string identifier = 1;
+    }
+
+    oneof calls {
+        Permission permission = 1;
+        Scheduled scheduled = 2;
+        Pending pending = 3;
+        NotificationWhileRunning triggeredWhileRunning = 4;
+        NotificationResponse notificationResponse = 5;
+    }
+}
