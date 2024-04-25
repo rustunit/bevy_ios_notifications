@@ -9,3 +9,7 @@ https://github.com/rustunit/bevy_ios_notifications/assets/776816/78e9d708-1cdd-4
 * scheduling local notifications
 * enable/disable presenting notifications while app is foregrounded
 * and the notoriously hard (in unity) to do things like: what notification was clicked
+
+## Guide
+
+TBD
