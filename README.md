@@ -22,6 +22,8 @@ Demo from our game using this crate: [zoolitaire.com](https://zoolitaire.com)
 2. Add Rust dependency
 3. Setup Plugin
 
+Use [Apple Push Notification Dashboard](https://icloud.developer.apple.com/dashboard/notifications) to simply send push notifications for testing.
+
 ### 1. Add to XCode
 
 Go to `File` -> `Add Package Dependencies` and paste `https://github.com/rustunit/bevy_ios_notifications.git` into the search bar on the top right:
