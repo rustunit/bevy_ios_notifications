@@ -110,6 +110,18 @@ impl IosNotificationsResource {
 
     ///
     #[cfg(target_os = "ios")]
+    pub fn push_token_to_hex_string(bytes: &Vec<u8>) -> String {
+        hex::encode_upper(bytes)
+    }
+
+    ///
+    #[cfg(not(target_os = "ios"))]
+    pub fn push_token_to_hex_string(_bytes: &Vec<u8>) -> String {
+        String::new()
+    }
+
+    ///
+    #[cfg(target_os = "ios")]
     pub fn set_show_foregrounded(&self, v: bool) {
         crate::native::set_show_foregrounded(v)
     }
