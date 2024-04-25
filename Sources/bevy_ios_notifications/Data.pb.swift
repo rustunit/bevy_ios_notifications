@@ -403,6 +403,14 @@ struct BevyIos_Notifications_AsyncEvent {
     set {calls = .notificationResponse(newValue)}
   }
 
+  var remoteNotificationRegistration: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration {
+    get {
+      if case .remoteNotificationRegistration(let v)? = calls {return v}
+      return BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration()
+    }
+    set {calls = .remoteNotificationRegistration(newValue)}
+  }
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   enum OneOf_Calls: Equatable {
@@ -411,6 +419,7 @@ struct BevyIos_Notifications_AsyncEvent {
     case pending(BevyIos_Notifications_AsyncEvent.Pending)
     case triggeredWhileRunning(BevyIos_Notifications_AsyncEvent.NotificationWhileRunning)
     case notificationResponse(BevyIos_Notifications_AsyncEvent.NotificationResponse)
+    case remoteNotificationRegistration(BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration)
 
   #if !swift(>=4.1)
     static func ==(lhs: BevyIos_Notifications_AsyncEvent.OneOf_Calls, rhs: BevyIos_Notifications_AsyncEvent.OneOf_Calls) -> Bool {
@@ -436,6 +445,10 @@ struct BevyIos_Notifications_AsyncEvent {
       }()
       case (.notificationResponse, .notificationResponse): return {
         guard case .notificationResponse(let l) = lhs, case .notificationResponse(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.remoteNotificationRegistration, .remoteNotificationRegistration): return {
+        guard case .remoteNotificationRegistration(let l) = lhs, case .remoteNotificationRegistration(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       default: return false
@@ -522,6 +535,84 @@ struct BevyIos_Notifications_AsyncEvent {
     init() {}
   }
 
+  struct RemoteNotificationRegistration {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var results: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.OneOf_Results? = nil
+
+    var failed: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Failed {
+      get {
+        if case .failed(let v)? = results {return v}
+        return BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Failed()
+      }
+      set {results = .failed(newValue)}
+    }
+
+    var token: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.DeviceToken {
+      get {
+        if case .token(let v)? = results {return v}
+        return BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.DeviceToken()
+      }
+      set {results = .token(newValue)}
+    }
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    enum OneOf_Results: Equatable {
+      case failed(BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Failed)
+      case token(BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.DeviceToken)
+
+    #if !swift(>=4.1)
+      static func ==(lhs: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.OneOf_Results, rhs: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.OneOf_Results) -> Bool {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch (lhs, rhs) {
+        case (.failed, .failed): return {
+          guard case .failed(let l) = lhs, case .failed(let r) = rhs else { preconditionFailure() }
+          return l == r
+        }()
+        case (.token, .token): return {
+          guard case .token(let l) = lhs, case .token(let r) = rhs else { preconditionFailure() }
+          return l == r
+        }()
+        default: return false
+        }
+      }
+    #endif
+    }
+
+    struct DeviceToken {
+      // SwiftProtobuf.Message conformance is added in an extension below. See the
+      // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+      // methods supported on all messages.
+
+      var token: String = String()
+
+      var unknownFields = SwiftProtobuf.UnknownStorage()
+
+      init() {}
+    }
+
+    struct Failed {
+      // SwiftProtobuf.Message conformance is added in an extension below. See the
+      // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+      // methods supported on all messages.
+
+      var localizedDescription: String = String()
+
+      var code: Int32 = 0
+
+      var unknownFields = SwiftProtobuf.UnknownStorage()
+
+      init() {}
+    }
+
+    init() {}
+  }
+
   init() {}
 }
 
@@ -549,6 +640,10 @@ extension BevyIos_Notifications_AsyncEvent.Scheduled: @unchecked Sendable {}
 extension BevyIos_Notifications_AsyncEvent.Permission: @unchecked Sendable {}
 extension BevyIos_Notifications_AsyncEvent.NotificationResponse: @unchecked Sendable {}
 extension BevyIos_Notifications_AsyncEvent.NotificationWhileRunning: @unchecked Sendable {}
+extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration: @unchecked Sendable {}
+extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.OneOf_Results: @unchecked Sendable {}
+extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.DeviceToken: @unchecked Sendable {}
+extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Failed: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -1139,6 +1234,7 @@ extension BevyIos_Notifications_AsyncEvent: SwiftProtobuf.Message, SwiftProtobuf
     3: .same(proto: "pending"),
     4: .same(proto: "triggeredWhileRunning"),
     5: .same(proto: "notificationResponse"),
+    6: .same(proto: "remoteNotificationRegistration"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -1212,6 +1308,19 @@ extension BevyIos_Notifications_AsyncEvent: SwiftProtobuf.Message, SwiftProtobuf
           self.calls = .notificationResponse(v)
         }
       }()
+      case 6: try {
+        var v: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration?
+        var hadOneofValue = false
+        if let current = self.calls {
+          hadOneofValue = true
+          if case .remoteNotificationRegistration(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.calls = .remoteNotificationRegistration(v)
+        }
+      }()
       default: break
       }
     }
@@ -1242,6 +1351,10 @@ extension BevyIos_Notifications_AsyncEvent: SwiftProtobuf.Message, SwiftProtobuf
     case .notificationResponse?: try {
       guard case .notificationResponse(let v)? = self.calls else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    }()
+    case .remoteNotificationRegistration?: try {
+      guard case .remoteNotificationRegistration(let v)? = self.calls else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     }()
     case nil: break
     }
@@ -1460,6 +1573,146 @@ extension BevyIos_Notifications_AsyncEvent.NotificationWhileRunning: SwiftProtob
 
   static func ==(lhs: BevyIos_Notifications_AsyncEvent.NotificationWhileRunning, rhs: BevyIos_Notifications_AsyncEvent.NotificationWhileRunning) -> Bool {
     if lhs.identifier != rhs.identifier {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.protoMessageName + ".RemoteNotificationRegistration"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "failed"),
+    2: .same(proto: "token"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try {
+        var v: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Failed?
+        var hadOneofValue = false
+        if let current = self.results {
+          hadOneofValue = true
+          if case .failed(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.results = .failed(v)
+        }
+      }()
+      case 2: try {
+        var v: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.DeviceToken?
+        var hadOneofValue = false
+        if let current = self.results {
+          hadOneofValue = true
+          if case .token(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.results = .token(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    switch self.results {
+    case .failed?: try {
+      guard case .failed(let v)? = self.results else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    }()
+    case .token?: try {
+      guard case .token(let v)? = self.results else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    }()
+    case nil: break
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration, rhs: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration) -> Bool {
+    if lhs.results != rhs.results {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.DeviceToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.protoMessageName + ".DeviceToken"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "token"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.token) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.token.isEmpty {
+      try visitor.visitSingularStringField(value: self.token, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.DeviceToken, rhs: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.DeviceToken) -> Bool {
+    if lhs.token != rhs.token {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Failed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.protoMessageName + ".Failed"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "localizedDescription"),
+    2: .same(proto: "code"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.localizedDescription) }()
+      case 2: try { try decoder.decodeSingularInt32Field(value: &self.code) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.localizedDescription.isEmpty {
+      try visitor.visitSingularStringField(value: self.localizedDescription, fieldNumber: 1)
+    }
+    if self.code != 0 {
+      try visitor.visitSingularInt32Field(value: self.code, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Failed, rhs: BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Failed) -> Bool {
+    if lhs.localizedDescription != rhs.localizedDescription {return false}
+    if lhs.code != rhs.code {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

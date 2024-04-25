@@ -101,11 +101,28 @@ message AsyncEvent {
         string identifier = 1;
     }
 
+    message RemoteNotificationRegistration {
+        message DeviceToken {
+            string token = 1;
+        }
+
+        message Failed {
+            string localizedDescription = 1;
+            int32 code = 2;
+        }
+
+        oneof results {
+            Failed failed = 1;
+            DeviceToken token = 2;
+        }
+    }
+
     oneof calls {
         Permission permission = 1;
         Scheduled scheduled = 2;
         Pending pending = 3;
         NotificationWhileRunning triggeredWhileRunning = 4;
         NotificationResponse notificationResponse = 5;
+        RemoteNotificationRegistration remoteNotificationRegistration = 6;
     }
 }

@@ -15,6 +15,15 @@ pub struct IosNotificationResponse {
     pub action: String,
 }
 
+#[derive(Clone, Debug)]
+pub enum IosRemoteNotificationRegistration {
+    Failed {
+        code: i32,
+        localized_description: String,
+    },
+    DeviceToken(String),
+}
+
 #[derive(Event, Clone, Debug)]
 pub enum IosNotificationEvents {
     PermissionResponse(bool),
@@ -23,6 +32,7 @@ pub enum IosNotificationEvents {
     NotificationTriggered(String),
     PendingNotifications(Vec<String>),
     NotificationResponse(IosNotificationResponse),
+    RemoteNotificationRegistration(IosRemoteNotificationRegistration),
 }
 
 #[allow(dead_code)]

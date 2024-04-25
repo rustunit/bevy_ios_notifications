@@ -7,7 +7,10 @@ use std::sync::OnceLock;
 use bevy::prelude::*;
 use prost::{bytes::BytesMut, Message};
 
-use crate::{AsyncEvent, IosNotificationEvents, IosNotificationResponse, Request, Response};
+use crate::{
+    plugin::IosRemoteNotificationRegistration, AsyncEvent, IosNotificationEvents,
+    IosNotificationResponse, Request, Response,
+};
 
 use bevy_crossbeam_event::CrossbeamEventSender;
 use block2::{Block, RcBlock};
@@ -56,17 +59,19 @@ pub fn init() {
                 crate::async_event::Calls::TriggeredWhileRunning(v) => {
                     Some(IosNotificationEvents::NotificationTriggered(v.identifier))
                 }
-                //TODO:
                 crate::async_event::Calls::NotificationResponse(v) => Some(
                     IosNotificationEvents::NotificationResponse(IosNotificationResponse {
                         identifier: v.identifier,
                         action: v.action_identifier,
                     }),
                 ),
+                crate::async_event::Calls::RemoteNotificationRegistration(v) => {
+                    convert(v).map(|v| IosNotificationEvents::RemoteNotificationRegistration(v))
+                }
             };
 
             if let Some(e) = response {
-                info!("forward native event: {e:?}");
+                debug!("forward native event: {e:?}");
                 SENDER.get().unwrap().as_ref().unwrap().send(e);
             }
         }
@@ -74,6 +79,26 @@ pub fn init() {
 
     unsafe {
         swift_notifications_init(&block);
+    }
+}
+
+fn convert(
+    v: crate::async_event::RemoteNotificationRegistration,
+) -> Option<IosRemoteNotificationRegistration> {
+    match v.results {
+        Some(crate::async_event::remote_notification_registration::Results::Failed(
+            crate::async_event::remote_notification_registration::Failed {
+                localized_description,
+                code,
+            },
+        )) => Some(IosRemoteNotificationRegistration::Failed {
+            code: code,
+            localized_description: localized_description,
+        }),
+        Some(crate::async_event::remote_notification_registration::Results::Token(
+            crate::async_event::remote_notification_registration::DeviceToken { token },
+        )) => Some(IosRemoteNotificationRegistration::DeviceToken(token)),
+        None => None,
     }
 }
 
