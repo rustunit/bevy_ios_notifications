@@ -3,9 +3,8 @@ use std::collections::HashMap;
 use bevy::prelude::*;
 use builder_pattern::Builder;
 
-use crate::request;
 #[cfg(target_os = "ios")]
-use crate::{response, Request};
+use crate::{request, response, Request};
 
 #[derive(Default)]
 pub struct IosNotificationTrigger {
@@ -64,6 +63,7 @@ pub struct IosNotificationRequest {
     pub trigger: Option<IosNotificationTrigger>,
 }
 
+#[cfg(target_os = "ios")]
 impl From<IosNotificationRequest> for request::Schedule {
     fn from(v: IosNotificationRequest) -> Self {
         Self {
@@ -146,7 +146,7 @@ impl IosNotificationsResource {
 
     ///
     #[cfg(target_os = "ios")]
-    pub fn schedule(&self, request: IosNotificationRequest) -> String {
+    pub fn schedule(request: IosNotificationRequest) -> String {
         let res = crate::native::request(Request {
             calls: Some(request::Calls::Schedule(request.into())),
         });
@@ -163,7 +163,7 @@ impl IosNotificationsResource {
     }
 
     #[cfg(not(target_os = "ios"))]
-    pub fn schedule(&self, _request: IosNotificationRequest) -> String {
+    pub fn schedule(_request: IosNotificationRequest) -> String {
         String::new()
     }
 

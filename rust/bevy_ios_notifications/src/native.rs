@@ -60,6 +60,7 @@ pub fn init() {
             };
 
             if let Some(e) = response {
+                info!("forward native event: {e:?}");
                 SENDER.get().unwrap().as_ref().unwrap().send(e);
             }
         }

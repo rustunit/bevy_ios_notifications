@@ -2,15 +2,22 @@
 name = "bevy_ios_notifications"
 version = "0.1.0"
 edition = "2021"
+readme = "../../README.md"
+license = "MIT"
+authors = ["extrawurst <mail@rusticorn.com>"]
+documentation = "https://docs.rs/bevy_ios_notifications"
+repository = "https://github.com/rustunit/bevy_ios_notifications"
+keywords = ["bevy", "gamedev", "mobile", "ios", "swift"]
+description = "Bevy plugin to interact with iOS Notifications API"
 
 [dependencies]
 bevy = { version = "0.13", default-features = false }
-prost = "0.12"
 builder-pattern = { version = "0.4", default-features = false }
 
 [target.'cfg(target_os = "ios")'.dependencies]
 bevy_crossbeam_event = "0.5"
 block2 = "0.5"
+prost = "0.12"
 
 [build-dependencies]
 prost-build = { version = "0.12" }

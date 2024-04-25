@@ -1,6 +1,13 @@
 use bevy::prelude::*;
 
-use crate::{request::Permissions, IosNotificationsResource};
+use crate::IosNotificationsResource;
+
+#[derive(Clone, Debug, Default)]
+pub struct IosNotificationPermissions {
+    pub alert: bool,
+    pub sound: bool,
+    pub badge: bool,
+}
 
 #[derive(Event, Clone, Debug)]
 pub enum IosNotificationEvents {
@@ -14,13 +21,13 @@ pub enum IosNotificationEvents {
 #[allow(dead_code)]
 #[derive(Default)]
 pub struct IosNotificationsPlugin {
-    permissions: Permissions,
+    permissions: IosNotificationPermissions,
 }
 
 impl IosNotificationsPlugin {
     pub fn with_permissions(alert: bool, sound: bool, badge: bool) -> Self {
         Self {
-            permissions: Permissions {
+            permissions: IosNotificationPermissions {
                 alert,
                 sound,
                 badge,
@@ -42,7 +49,13 @@ impl Plugin for IosNotificationsPlugin {
         {
             crate::native::init();
             crate::native::request(crate::Request {
-                calls: Some(crate::request::Calls::Permissions(self.permissions.clone())),
+                calls: Some(crate::request::Calls::Permissions(
+                    crate::request::Permissions {
+                        alert: self.permissions.alert,
+                        sound: self.permissions.sound,
+                        badge: self.permissions.badge,
+                    },
+                )),
             });
 
             use bevy_crossbeam_event::{CrossbeamEventApp, CrossbeamEventSender};
