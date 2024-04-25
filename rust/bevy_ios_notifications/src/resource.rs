@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use bevy::prelude::*;
 use builder_pattern::Builder;
 
+use crate::plugin::IosNotificationPermissions;
 #[cfg(target_os = "ios")]
 use crate::{request, response, Request};
 
@@ -166,6 +167,22 @@ impl IosNotificationsResource {
     pub fn schedule(_request: IosNotificationRequest) -> String {
         String::new()
     }
+
+    #[cfg(target_os = "ios")]
+    pub fn request_permissions(&self, permissions: IosNotificationPermissions) {
+        crate::native::request(crate::Request {
+            calls: Some(crate::request::Calls::Permissions(
+                crate::request::Permissions {
+                    alert: permissions.alert,
+                    sound: permissions.sound,
+                    badge: permissions.badge,
+                },
+            )),
+        });
+    }
+
+    #[cfg(not(target_os = "ios"))]
+    pub fn request_permissions(&self, _permissions: IosNotificationPermissions) {}
 
     /// will respond async via `IosNotificationEvents::PendingNotifications` event
     pub fn request_pending(&self) {
