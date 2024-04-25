@@ -1,6 +1,6 @@
 # bevy_ios_notifications
 
-![demo](./demo.mp4)
+https://github.com/rustunit/bevy_ios_notifications/assets/776816/78e9d708-1cdd-4e54-af2a-c6a5b787f98b
 
 ## Features
 
