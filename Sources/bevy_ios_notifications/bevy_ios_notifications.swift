@@ -140,10 +140,11 @@ public class BevyNotifications : NSObject, UNUserNotificationCenterDelegate
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions)
             -> Void) {
-
+                
                 UIApplication.shared.registerForRemoteNotifications()
                 self.sendAsyncEvent(BevyIos_Notifications_AsyncEvent.with{
                     $0.calls = BevyIos_Notifications_AsyncEvent.OneOf_Calls.triggeredWhileRunning(BevyIos_Notifications_AsyncEvent.NotificationWhileRunning.with{
+                        //TODO: provide at least userData back
                         $0.identifier = notification.request.identifier
                     })
                 })
@@ -157,6 +158,7 @@ public class BevyNotifications : NSObject, UNUserNotificationCenterDelegate
         
         self.sendAsyncEvent(BevyIos_Notifications_AsyncEvent.with{
             $0.calls = BevyIos_Notifications_AsyncEvent.OneOf_Calls.notificationResponse(BevyIos_Notifications_AsyncEvent.NotificationResponse.with{
+                //TODO: provide at least userData back
                 $0.identifier = notification.notification.request.identifier
                 $0.actionIdentifier = notification.actionIdentifier
             })

@@ -7,7 +7,7 @@ use std::sync::OnceLock;
 use bevy::prelude::*;
 use prost::{bytes::BytesMut, Message};
 
-use crate::{AsyncEvent, IosNotificationEvents, Request, Response};
+use crate::{AsyncEvent, IosNotificationEvents, IosNotificationResponse, Request, Response};
 
 use bevy_crossbeam_event::CrossbeamEventSender;
 use block2::{Block, RcBlock};
@@ -56,7 +56,12 @@ pub fn init() {
                     Some(IosNotificationEvents::NotificationTriggered(v.identifier))
                 }
                 //TODO:
-                crate::async_event::Calls::NotificationResponse(_) => None,
+                crate::async_event::Calls::NotificationResponse(v) => Some(
+                    IosNotificationEvents::NotificationResponse(IosNotificationResponse {
+                        identifier: v.identifier,
+                        action: v.action_identifier,
+                    }),
+                ),
             };
 
             if let Some(e) = response {

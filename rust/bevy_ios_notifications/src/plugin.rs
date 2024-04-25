@@ -9,6 +9,12 @@ pub struct IosNotificationPermissions {
     pub badge: bool,
 }
 
+#[derive(Clone, Debug, Default)]
+pub struct IosNotificationResponse {
+    pub identifier: String,
+    pub action: String,
+}
+
 #[derive(Event, Clone, Debug)]
 pub enum IosNotificationEvents {
     PermissionResponse(bool),
@@ -16,6 +22,7 @@ pub enum IosNotificationEvents {
     NotificationSchedulingFailed(String),
     NotificationTriggered(String),
     PendingNotifications(Vec<String>),
+    NotificationResponse(IosNotificationResponse),
 }
 
 #[allow(dead_code)]
