@@ -168,6 +168,11 @@ impl IosNotificationsResource {
         String::new()
     }
 
+    pub fn register_for_push() {
+        #[cfg(target_os = "ios")]
+        crate::native::register_for_push();
+    }
+
     #[cfg(target_os = "ios")]
     pub fn request_permissions(&self, permissions: IosNotificationPermissions) {
         crate::native::request(crate::Request {

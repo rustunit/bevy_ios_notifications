@@ -17,6 +17,7 @@ extern "C" {
     fn swift_notifications_badge_set(number: i32);
     fn swift_notifications_badge_get() -> i32;
     fn swift_notifications_registered_for_push() -> bool;
+    fn swift_notifications_register_for_push();
     fn swift_notifications_show_in_foreground_set(show: bool);
     fn swift_notifications_show_in_foreground_get() -> bool;
     fn ios_notifications_request(
@@ -98,6 +99,10 @@ pub fn set_show_foregrounded(v: bool) {
 
 pub fn registered_for_push() -> bool {
     unsafe { swift_notifications_registered_for_push() }
+}
+
+pub fn register_for_push() {
+    unsafe { swift_notifications_register_for_push() }
 }
 
 pub fn request(request: Request) -> Response {

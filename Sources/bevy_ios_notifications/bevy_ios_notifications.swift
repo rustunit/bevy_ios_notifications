@@ -158,7 +158,7 @@ public class BevyNotifications : NSObject, UNUserNotificationCenterDelegate
         
         self.sendAsyncEvent(BevyIos_Notifications_AsyncEvent.with{
             $0.calls = BevyIos_Notifications_AsyncEvent.OneOf_Calls.notificationResponse(BevyIos_Notifications_AsyncEvent.NotificationResponse.with{
-                //TODO: provide at least userData back
+                //TODO: provide at least userData back and trigger so we know whether it was a push
                 $0.identifier = notification.notification.request.identifier
                 $0.actionIdentifier = notification.actionIdentifier
             })
@@ -173,6 +173,10 @@ public class BevyNotifications : NSObject, UNUserNotificationCenterDelegate
 @_cdecl("swift_notifications_init")
 public func swiftNotificationsInit(cb: @escaping (UnsafePointer<CUnsignedChar>, CLong)->()) {
     BevyNotifications.Init(cb:cb)
+}
+
+@_cdecl("swift_notifications_register_for_push")
+public func swiftNotificationsRegisterForPush() {
     UIApplication.shared.registerForRemoteNotifications()
 }
 
