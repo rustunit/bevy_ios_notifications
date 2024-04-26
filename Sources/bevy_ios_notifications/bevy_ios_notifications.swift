@@ -174,88 +174,6 @@ public class BevyNotifications : NSObject, UNUserNotificationCenterDelegate
     //TODO: openSettingsFor delegate
 }
 
-class AppDelegateSwizzling {
-    
-    static var hasOriginal_registerWithToken = false;
-    static var hasOriginal_failToRegister = false;
-    
-    @objc func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let deviceTokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
-        
-        BevyNotifications.SendAsyncEvent(BevyIos_Notifications_AsyncEvent.with{
-            $0.calls = BevyIos_Notifications_AsyncEvent.OneOf_Calls.remoteNotificationRegistration(BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.with{
-                $0.results = BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.OneOf_Results.token(.with{
-                    $0.token = deviceTokenString
-                })
-            })
-        })
-        
-        if AppDelegateSwizzling.hasOriginal_registerWithToken {
-            // call original before we swizzled
-            self.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
-        }
-    }
-    
-    @objc func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        print("didFailToRegisterForRemoteNotificationsWithError\n")
-        
-        BevyNotifications.SendAsyncEvent(BevyIos_Notifications_AsyncEvent.with{
-            $0.calls = BevyIos_Notifications_AsyncEvent.OneOf_Calls.remoteNotificationRegistration(BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.with{
-                $0.results = BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.OneOf_Results.failed(.with{
-                    $0.code = Int32(error.code)
-                    $0.localizedDescription = error.localizedDescription
-                })
-            })
-        })
-        
-        if AppDelegateSwizzling.hasOriginal_failToRegister {
-            // call original before we swizzled
-            self.application(application, didFailToRegisterForRemoteNotificationsWithError: error)
-        }
-    }
-
-    static func swizzleDidRegisterForRemoteNotifications() {
-        let appDelegate = UIApplication.shared.delegate
-        let appDelegateClass = object_getClass(appDelegate)
-
-        let originalSelector = #selector(UIApplicationDelegate.application(_:didRegisterForRemoteNotificationsWithDeviceToken:))
-        let swizzledSelector = #selector(AppDelegateSwizzling.self.application(_:didRegisterForRemoteNotificationsWithDeviceToken:))
-
-        guard let swizzledMethod = class_getInstanceMethod(AppDelegateSwizzling.self, swizzledSelector) else {
-            return
-        }
-
-        if let originalMethod = class_getInstanceMethod(appDelegateClass, originalSelector)  {
-            // exchange implementation
-            method_exchangeImplementations(originalMethod, swizzledMethod)
-            AppDelegateSwizzling.hasOriginal_registerWithToken = true
-        } else {
-            // add implementation
-            class_addMethod(appDelegateClass, swizzledSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
-        }
-    }
-    
-    static func swizzleDidFailToRegisterForRemoteNotifications() {
-        let appDelegate = UIApplication.shared.delegate
-        let appDelegateClass = object_getClass(appDelegate)
-
-        let originalSelector = #selector(UIApplicationDelegate.application(_:didFailToRegisterForRemoteNotificationsWithError:))
-        let swizzledSelector = #selector(AppDelegateSwizzling.self.application(_:didFailToRegisterForRemoteNotificationsWithError:))
-
-        guard let swizzledMethod = class_getInstanceMethod(AppDelegateSwizzling.self, swizzledSelector) else {
-            return
-        }
-
-        if let originalMethod = class_getInstanceMethod(appDelegateClass, originalSelector)  {
-            // exchange implementation
-            method_exchangeImplementations(originalMethod, swizzledMethod)
-            AppDelegateSwizzling.hasOriginal_failToRegister = true
-        } else {
-            // add implementation
-            class_addMethod(appDelegateClass, swizzledSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
-        }
-    }
-}
 
 @_cdecl("swift_notifications_init")
 public func swiftNotificationsInit(cb: @escaping (UnsafePointer<CUnsignedChar>, CLong)->()) {
@@ -264,8 +182,7 @@ public func swiftNotificationsInit(cb: @escaping (UnsafePointer<CUnsignedChar>, 
 
 @_cdecl("swift_notifications_register_for_push")
 public func swiftNotificationsRegisterForPush() {
-    AppDelegateSwizzling.swizzleDidRegisterForRemoteNotifications()
-    AppDelegateSwizzling.swizzleDidFailToRegisterForRemoteNotifications()
+    AppDelegateSwizzler.setup()
     UIApplication.shared.registerForRemoteNotifications()
 }
 
