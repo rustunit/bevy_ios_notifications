@@ -175,6 +175,10 @@ public class BevyNotifications : NSObject, UNUserNotificationCenterDelegate
 }
 
 class AppDelegateSwizzling {
+    
+    static var hasOriginal_registerWithToken = false;
+    static var hasOriginal_failToRegister = false;
+    
     @objc func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let deviceTokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         
@@ -185,6 +189,11 @@ class AppDelegateSwizzling {
                 })
             })
         })
+        
+        if AppDelegateSwizzling.hasOriginal_registerWithToken {
+            // call original before we swizzled
+            self.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
+        }
     }
     
     @objc func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
@@ -198,6 +207,11 @@ class AppDelegateSwizzling {
                 })
             })
         })
+        
+        if AppDelegateSwizzling.hasOriginal_failToRegister {
+            // call original before we swizzled
+            self.application(application, didFailToRegisterForRemoteNotificationsWithError: error)
+        }
     }
 
     static func swizzleDidRegisterForRemoteNotifications() {
@@ -214,6 +228,7 @@ class AppDelegateSwizzling {
         if let originalMethod = class_getInstanceMethod(appDelegateClass, originalSelector)  {
             // exchange implementation
             method_exchangeImplementations(originalMethod, swizzledMethod)
+            AppDelegateSwizzling.hasOriginal_registerWithToken = true
         } else {
             // add implementation
             class_addMethod(appDelegateClass, swizzledSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
@@ -234,6 +249,7 @@ class AppDelegateSwizzling {
         if let originalMethod = class_getInstanceMethod(appDelegateClass, originalSelector)  {
             // exchange implementation
             method_exchangeImplementations(originalMethod, swizzledMethod)
+            AppDelegateSwizzling.hasOriginal_failToRegister = true
         } else {
             // add implementation
             class_addMethod(appDelegateClass, swizzledSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
