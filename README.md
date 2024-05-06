@@ -8,6 +8,8 @@ https://github.com/rustunit/bevy_ios_notifications/assets/776816/78e9d708-1cdd-4
 
 Demo from our game using this crate: [zoolitaire.com](https://zoolitaire.com)
 
+**See also** [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap), [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts), [bevy_ios_gamecenter](https://github.com/rustunit/bevy_ios_gamecenter), [bevy_ios_review](https://github.com/rustunit/bevy_ios_review) & [bevy_ios_impact](https://github.com/rustunit/bevy_ios_impact)
+
 ## Features
 
 * change/read badge
@@ -111,3 +113,15 @@ fn process_notifications(
 
 * due to the more complex nature of the types that need to be send in and out this crates uses protobuf for that ([see schema](./rust/bevy_ios_notifications/src/Data.proto))
 * because [winit](https://github.com/rust-windowing/winit) currently does not let you hook into the AppDelegates's `didRegisterForRemoteNotificationsWithDeviceToken` callback we use method swizzling to intercept these ([see code](https://github.com/rustunit/bevy_ios_notifications/blob/49e33b5a389f83ecd48eb6b851145ed57790eb23/Sources/bevy_ios_notifications/bevy_ios_notifications.swift#L177), [see winit PR (dont hold your breath)](https://github.com/rust-windowing/winit/pull/3650))
+
+# License
+
+All code in this repository is dual-licensed under either:
+
+- MIT License (LICENSE-MIT or http://opensource.org/licenses/MIT)
+- Apache License, Version 2.0 (LICENSE-APACHE or http://www.apache.org/licenses/LICENSE-2.0)
+
+at your option. This means you can select the license you prefer.
+
+## Your contributions
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
