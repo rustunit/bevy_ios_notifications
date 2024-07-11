@@ -83,7 +83,7 @@ impl Plugin for IosNotificationsPlugin {
             app.add_crossbeam_event::<IosNotificationEvents>();
 
             let sender = app
-                .world
+                .world()
                 .get_resource::<CrossbeamEventSender<IosNotificationEvents>>()
                 .unwrap()
                 .clone();

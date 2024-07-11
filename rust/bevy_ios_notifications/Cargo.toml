@@ -1,6 +1,6 @@
 [package]
 name = "bevy_ios_notifications"
-version = "0.1.6"
+version = "0.2.0"
 edition = "2021"
 readme = "../../README.md"
 license = "MIT"
@@ -11,11 +11,11 @@ keywords = ["bevy", "gamedev", "mobile", "ios", "swift"]
 description = "Bevy plugin to interact with iOS Notifications API"
 
 [dependencies]
-bevy = { version = "0.13", default-features = false }
+bevy = { version = "0.14", default-features = false }
 builder-pattern = { version = "0.4", default-features = false }
 
 [target.'cfg(target_os = "ios")'.dependencies]
-bevy_crossbeam_event = "0.5"
+bevy_crossbeam_event = "0.6"
 block2 = "0.5"
 prost = "0.12"
 

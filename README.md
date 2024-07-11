@@ -40,7 +40,7 @@ cargo add bevy_ios_notifications
 or 
 
 ```
-bevy_ios_notifications = { version = "0.1" }
+bevy_ios_notifications = { version = "0.2" }
 ```
 
 ### 3. Setup Plugin
@@ -113,6 +113,13 @@ fn process_notifications(
 
 * due to the more complex nature of the types that need to be send in and out this crates uses protobuf for that ([see schema](./rust/bevy_ios_notifications/src/Data.proto))
 * because [winit](https://github.com/rust-windowing/winit) currently does not let you hook into the AppDelegates's `didRegisterForRemoteNotificationsWithDeviceToken` callback we use method swizzling to intercept these ([see code](https://github.com/rustunit/bevy_ios_notifications/blob/49e33b5a389f83ecd48eb6b851145ed57790eb23/Sources/bevy_ios_notifications/bevy_ios_notifications.swift#L177), [see winit PR (dont hold your breath)](https://github.com/rust-windowing/winit/pull/3650))
+
+## Bevy version support
+
+|bevy|bevy\_ios\_notifications|
+|----|---|
+|0.14|0.2,main|
+|0.13|0.1|
 
 # License
 
