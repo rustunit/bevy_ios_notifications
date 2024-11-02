@@ -217,33 +217,39 @@ public func request(
     buffer: UnsafeMutablePointer<UInt8>,
     dataSize: CInt,
     dataLen: UnsafeMutablePointer<CInt>
-) {
+) -> Bool {
     let data_in = Data(bytes: buffer, count: Int(dataLen.pointee))
     
-    let request = try! BevyIos_Notifications_Request(serializedData: data_in)
-    
-    var response = BevyIos_Notifications_Response()
-    
-    switch request.calls {
-    case .schedule(let schedule):
-        let id = BevyNotifications.shared.Schedule(schedule)
-        let call_response = BevyIos_Notifications_Response.Schedule.with{$0.identifier = id}
-        response.calls = BevyIos_Notifications_Response.OneOf_Calls.schedule(call_response)
-    case .pending(let pending):
-        let id = BevyNotifications.shared.requestPending()
-        response.calls = BevyIos_Notifications_Response.OneOf_Calls.pending(BevyIos_Notifications_Response.Pending())
-    case .permissions(let permissions):
-        BevyNotifications.shared.AskPermission(permissions)
-    case .removeAllDelivered(_):
-        BevyNotifications.shared.RemoveAllDelivered()
-    case .removeAllPending(_):
-        BevyNotifications.shared.RemoveAllPending()
-    case .none:
-        break
+    do {
+        let request = try BevyIos_Notifications_Request(serializedData: data_in)
+        
+        var response = BevyIos_Notifications_Response()
+        
+        switch request.calls {
+        case .schedule(let schedule):
+            let id = BevyNotifications.shared.Schedule(schedule)
+            let call_response = BevyIos_Notifications_Response.Schedule.with{$0.identifier = id}
+            response.calls = BevyIos_Notifications_Response.OneOf_Calls.schedule(call_response)
+        case .pending(let pending):
+            let id = BevyNotifications.shared.requestPending()
+            response.calls = BevyIos_Notifications_Response.OneOf_Calls.pending(BevyIos_Notifications_Response.Pending())
+        case .permissions(let permissions):
+            BevyNotifications.shared.AskPermission(permissions)
+        case .removeAllDelivered(_):
+            BevyNotifications.shared.RemoveAllDelivered()
+        case .removeAllPending(_):
+            BevyNotifications.shared.RemoveAllPending()
+        case .none:
+            return false
+        }
+        
+        var data_out = try response.serializedData()
+        let data_count = data_out.count;
+        data_out.copyBytes(to: buffer, count: data_count)
+        dataLen.pointee = CInt(data_count)
+        
+        return true
+    } catch {
+        return false
     }
-    
-    var data_out = try! response.serializedData();
-    let data_count = data_out.count;
-    data_out.copyBytes(to: buffer, count: data_count)
-    dataLen.pointee = CInt(data_count)
 }
