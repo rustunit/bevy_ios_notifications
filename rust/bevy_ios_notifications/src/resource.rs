@@ -3,9 +3,9 @@ use std::collections::HashMap;
 use bevy::prelude::*;
 use builder_pattern::Builder;
 
-use crate::{plugin::IosNotificationPermissions, NotificationId};
+use crate::plugin::IosNotificationPermissions;
 #[cfg(target_os = "ios")]
-use crate::{request, response, Request};
+use crate::{request, response, NotificationId, Request};
 
 #[derive(Default)]
 pub struct IosNotificationTrigger {
@@ -82,6 +82,15 @@ impl From<IosNotificationRequest> for request::Schedule {
                 repeat: trigger.repeat,
                 seconds: trigger.seconds,
             }),
+        }
+    }
+}
+
+#[cfg(target_os = "ios")]
+impl From<&String> for NotificationId {
+    fn from(v: &String) -> Self {
+        Self {
+            identifier: v.clone(),
         }
     }
 }
@@ -198,24 +207,38 @@ impl IosNotificationsResource {
     }
 
     ///
-    pub fn remove_pending(&self, ids: &[NotificationId]) {
+    #[cfg(target_os = "ios")]
+    pub fn remove_pending(&self, ids: &[String]) {
         #[cfg(target_os = "ios")]
         crate::native::request(Request {
             calls: Some(request::Calls::RemovePending(request::RemovePending {
-                items: ids.into(),
+                items: ids
+                    .into_iter()
+                    .map(|id| Into::<NotificationId>::into(id))
+                    .collect::<Vec<_>>(),
+            })),
+        });
+    }
+
+    #[cfg(not(target_os = "ios"))]
+    pub fn remove_pending(&self, _ids: &[String]) {}
+
+    ///
+    #[cfg(target_os = "ios")]
+    pub fn remove_delivered(&self, ids: &[String]) {
+        crate::native::request(Request {
+            calls: Some(request::Calls::RemoveDelivered(request::RemoveDelivered {
+                items: ids
+                    .into_iter()
+                    .map(|id| Into::<NotificationId>::into(id))
+                    .collect::<Vec<_>>(),
             })),
         });
     }
 
     ///
-    pub fn remove_delivered(&self, ids: &[NotificationId]) {
-        #[cfg(target_os = "ios")]
-        crate::native::request(Request {
-            calls: Some(request::Calls::RemovePending(request::RemoveDelivered {
-                items: ids.into(),
-            })),
-        });
-    }
+    #[cfg(not(target_os = "ios"))]
+    pub fn remove_delivered(&self, _ids: &[String]) {}
 
     ///
     pub fn remove_all_pending(&self) {
