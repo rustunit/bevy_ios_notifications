@@ -1,6 +1,6 @@
 [package]
 name = "bevy_ios_notifications"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 readme = "../../README.md"
 license = "MIT"
@@ -9,6 +9,9 @@ documentation = "https://docs.rs/bevy_ios_notifications"
 repository = "https://github.com/rustunit/bevy_ios_notifications"
 keywords = ["bevy", "gamedev", "mobile", "ios", "swift"]
 description = "Bevy plugin to interact with iOS Notifications API"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-apple-ios"
 
 [dependencies]
 bevy = { version = "0.14", default-features = false }
