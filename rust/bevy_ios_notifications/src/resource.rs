@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use bevy::prelude::*;
 use builder_pattern::Builder;
 
-use crate::plugin::IosNotificationPermissions;
+use crate::{plugin::IosNotificationPermissions, NotificationId};
 #[cfg(target_os = "ios")]
 use crate::{request, response, Request};
 
@@ -194,6 +194,26 @@ impl IosNotificationsResource {
         #[cfg(target_os = "ios")]
         crate::native::request(Request {
             calls: Some(request::Calls::Pending(request::Pending::default())),
+        });
+    }
+
+    ///
+    pub fn remove_pending(&self, ids: &[NotificationId]) {
+        #[cfg(target_os = "ios")]
+        crate::native::request(Request {
+            calls: Some(request::Calls::RemovePending(request::RemovePending {
+                items: ids.into(),
+            })),
+        });
+    }
+
+    ///
+    pub fn remove_delivered(&self, ids: &[NotificationId]) {
+        #[cfg(target_os = "ios")]
+        crate::native::request(Request {
+            calls: Some(request::Calls::RemovePending(request::RemoveDelivered {
+                items: ids.into(),
+            })),
         });
     }
 

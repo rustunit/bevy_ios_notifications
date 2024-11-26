@@ -30,6 +30,18 @@ public class BevyNotifications : NSObject, UNUserNotificationCenterDelegate
         }
     }
     
+    internal func removePending(_ request:BevyIos_Notifications_Request.RemovePending) {
+        var ids = [String]()
+        request.items.forEach{ids.append($0.identifier)}
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids)
+    }
+    
+    internal func removeDelivered(_ request:BevyIos_Notifications_Request.RemoveDelivered) {
+        var ids = [String]()
+        request.items.forEach{ids.append($0.identifier)}
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ids)
+    }
+    
     @available(iOS 15.0, *)
     internal func Schedule(_ request:BevyIos_Notifications_Request.Schedule) -> String {
         let content = UNMutableNotificationContent()
@@ -235,6 +247,10 @@ public func request(
             response.calls = BevyIos_Notifications_Response.OneOf_Calls.pending(BevyIos_Notifications_Response.Pending())
         case .permissions(let permissions):
             BevyNotifications.shared.AskPermission(permissions)
+        case .removePending(let request):
+            BevyNotifications.shared.removePending(request)
+        case .removeDelivered(let request):
+            BevyNotifications.shared.removeDelivered(request)
         case .removeAllDelivered(_):
             BevyNotifications.shared.RemoveAllDelivered()
         case .removeAllPending(_):

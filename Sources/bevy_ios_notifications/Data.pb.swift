@@ -63,7 +63,22 @@ struct BevyIos_Notifications_Request {
     set {calls = .pending(newValue)}
   }
 
-  /// RemovePending removePending = 4;
+  var removePending: BevyIos_Notifications_Request.RemovePending {
+    get {
+      if case .removePending(let v)? = calls {return v}
+      return BevyIos_Notifications_Request.RemovePending()
+    }
+    set {calls = .removePending(newValue)}
+  }
+
+  var removeDelivered: BevyIos_Notifications_Request.RemoveDelivered {
+    get {
+      if case .removeDelivered(let v)? = calls {return v}
+      return BevyIos_Notifications_Request.RemoveDelivered()
+    }
+    set {calls = .removeDelivered(newValue)}
+  }
+
   var removeAllPending: BevyIos_Notifications_Request.RemoveAllPending {
     get {
       if case .removeAllPending(let v)? = calls {return v}
@@ -86,7 +101,8 @@ struct BevyIos_Notifications_Request {
     case permissions(BevyIos_Notifications_Request.Permissions)
     case schedule(BevyIos_Notifications_Request.Schedule)
     case pending(BevyIos_Notifications_Request.Pending)
-    /// RemovePending removePending = 4;
+    case removePending(BevyIos_Notifications_Request.RemovePending)
+    case removeDelivered(BevyIos_Notifications_Request.RemoveDelivered)
     case removeAllPending(BevyIos_Notifications_Request.RemoveAllPending)
     case removeAllDelivered(BevyIos_Notifications_Request.RemoveAllDelivered)
 
@@ -106,6 +122,14 @@ struct BevyIos_Notifications_Request {
       }()
       case (.pending, .pending): return {
         guard case .pending(let l) = lhs, case .pending(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.removePending, .removePending): return {
+        guard case .removePending(let l) = lhs, case .removePending(let r) = rhs else { preconditionFailure() }
+        return l == r
+      }()
+      case (.removeDelivered, .removeDelivered): return {
+        guard case .removeDelivered(let l) = lhs, case .removeDelivered(let r) = rhs else { preconditionFailure() }
         return l == r
       }()
       case (.removeAllPending, .removeAllPending): return {
@@ -240,6 +264,18 @@ struct BevyIos_Notifications_Request {
   }
 
   struct RemovePending {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var items: [BevyIos_Notifications_NotificationId] = []
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  struct RemoveDelivered {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -626,6 +662,7 @@ extension BevyIos_Notifications_Request.Pending: @unchecked Sendable {}
 extension BevyIos_Notifications_Request.RemoveAllPending: @unchecked Sendable {}
 extension BevyIos_Notifications_Request.RemoveAllDelivered: @unchecked Sendable {}
 extension BevyIos_Notifications_Request.RemovePending: @unchecked Sendable {}
+extension BevyIos_Notifications_Request.RemoveDelivered: @unchecked Sendable {}
 extension BevyIos_Notifications_Request.Permissions: @unchecked Sendable {}
 extension BevyIos_Notifications_UserData: @unchecked Sendable {}
 extension BevyIos_Notifications_Response: @unchecked Sendable {}
@@ -688,8 +725,10 @@ extension BevyIos_Notifications_Request: SwiftProtobuf.Message, SwiftProtobuf._M
     1: .same(proto: "permissions"),
     2: .same(proto: "schedule"),
     3: .same(proto: "pending"),
-    5: .same(proto: "removeAllPending"),
-    6: .same(proto: "removeAllDelivered"),
+    4: .same(proto: "removePending"),
+    5: .same(proto: "removeDelivered"),
+    6: .same(proto: "removeAllPending"),
+    7: .same(proto: "removeAllDelivered"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -737,7 +776,33 @@ extension BevyIos_Notifications_Request: SwiftProtobuf.Message, SwiftProtobuf._M
           self.calls = .pending(v)
         }
       }()
+      case 4: try {
+        var v: BevyIos_Notifications_Request.RemovePending?
+        var hadOneofValue = false
+        if let current = self.calls {
+          hadOneofValue = true
+          if case .removePending(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.calls = .removePending(v)
+        }
+      }()
       case 5: try {
+        var v: BevyIos_Notifications_Request.RemoveDelivered?
+        var hadOneofValue = false
+        if let current = self.calls {
+          hadOneofValue = true
+          if case .removeDelivered(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.calls = .removeDelivered(v)
+        }
+      }()
+      case 6: try {
         var v: BevyIos_Notifications_Request.RemoveAllPending?
         var hadOneofValue = false
         if let current = self.calls {
@@ -750,7 +815,7 @@ extension BevyIos_Notifications_Request: SwiftProtobuf.Message, SwiftProtobuf._M
           self.calls = .removeAllPending(v)
         }
       }()
-      case 6: try {
+      case 7: try {
         var v: BevyIos_Notifications_Request.RemoveAllDelivered?
         var hadOneofValue = false
         if let current = self.calls {
@@ -786,13 +851,21 @@ extension BevyIos_Notifications_Request: SwiftProtobuf.Message, SwiftProtobuf._M
       guard case .pending(let v)? = self.calls else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
     }()
+    case .removePending?: try {
+      guard case .removePending(let v)? = self.calls else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    }()
+    case .removeDelivered?: try {
+      guard case .removeDelivered(let v)? = self.calls else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+    }()
     case .removeAllPending?: try {
       guard case .removeAllPending(let v)? = self.calls else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     }()
     case .removeAllDelivered?: try {
       guard case .removeAllDelivered(let v)? = self.calls else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
     }()
     case nil: break
     }
@@ -1023,6 +1096,38 @@ extension BevyIos_Notifications_Request.RemovePending: SwiftProtobuf.Message, Sw
   }
 
   static func ==(lhs: BevyIos_Notifications_Request.RemovePending, rhs: BevyIos_Notifications_Request.RemovePending) -> Bool {
+    if lhs.items != rhs.items {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BevyIos_Notifications_Request.RemoveDelivered: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = BevyIos_Notifications_Request.protoMessageName + ".RemoveDelivered"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "items"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.items) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.items.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.items, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: BevyIos_Notifications_Request.RemoveDelivered, rhs: BevyIos_Notifications_Request.RemoveDelivered) -> Bool {
     if lhs.items != rhs.items {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

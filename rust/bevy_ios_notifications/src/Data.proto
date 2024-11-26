@@ -40,6 +40,10 @@ message Request {
         repeated NotificationId items = 1;
     }
 
+    message RemoveDelivered {
+        repeated NotificationId items = 1;
+    }
+
     message Permissions {
         bool alert = 1;
         bool sound = 2;
@@ -50,9 +54,10 @@ message Request {
         Permissions permissions = 1;
         Schedule schedule = 2;
         Pending pending = 3;
-        // RemovePending removePending = 4;
-        RemoveAllPending removeAllPending = 5;
-        RemoveAllDelivered removeAllDelivered = 6;
+        RemovePending removePending = 4;
+        RemoveDelivered removeDelivered = 5;
+        RemoveAllPending removeAllPending = 6;
+        RemoveAllDelivered removeAllDelivered = 7;
     }
 }
 
