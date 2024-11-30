@@ -124,7 +124,8 @@ fn process_notifications(
 
 |bevy|bevy\_ios\_notifications|
 |----|---|
-|0.14|0.2,main|
+|0.15|0.3,main|
+|0.14|0.2|
 |0.13|0.1|
 
 # License
