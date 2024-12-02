@@ -2,17 +2,13 @@
 
 use std::ffi;
 
-use std::sync::OnceLock;
-
+use crate::{
+    channel, plugin::IosRemoteNotificationRegistration, AsyncEvent, IosNotificationEvents,
+    IosNotificationResponse, Request, Response,
+};
 use bevy::prelude::*;
 use prost::{bytes::BytesMut, Message};
 
-use crate::{
-    plugin::IosRemoteNotificationRegistration, AsyncEvent, IosNotificationEvents,
-    IosNotificationResponse, Request, Response,
-};
-
-use bevy_crossbeam_event::CrossbeamEventSender;
 use block2::{Block, RcBlock};
 
 extern "C" {
@@ -28,12 +24,6 @@ extern "C" {
         buffer_size: ffi::c_int,
         buffer_used: *mut ffi::c_int,
     ) -> bool;
-}
-
-static SENDER: OnceLock<Option<CrossbeamEventSender<IosNotificationEvents>>> = OnceLock::new();
-
-pub fn set_sender(sender: CrossbeamEventSender<IosNotificationEvents>) {
-    while !SENDER.set(Some(sender.clone())).is_ok() {}
 }
 
 pub fn init() {
@@ -72,7 +62,7 @@ pub fn init() {
 
             if let Some(e) = response {
                 debug!("forward native event: {e:?}");
-                SENDER.get().unwrap().as_ref().unwrap().send(e);
+                channel::send_event(e);
             }
         }
     });

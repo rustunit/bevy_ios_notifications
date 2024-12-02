@@ -88,7 +88,7 @@ impl Plugin for IosNotificationsPlugin {
                 .unwrap()
                 .clone();
 
-            crate::native::set_sender(sender);
+            crate::channel::set_sender(sender);
         }
     }
 }
