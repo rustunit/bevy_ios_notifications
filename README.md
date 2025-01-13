@@ -14,8 +14,6 @@ https://github.com/rustunit/bevy_ios_notifications/assets/776816/78e9d708-1cdd-4
 
 Demo from our game using this crate: [zoolitaire.com](https://zoolitaire.com)
 
-**See also** [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap), [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts), [bevy_ios_gamecenter](https://github.com/rustunit/bevy_ios_gamecenter), [bevy_ios_review](https://github.com/rustunit/bevy_ios_review) & [bevy_ios_impact](https://github.com/rustunit/bevy_ios_impact)
-
 ## Features
 
 * change/read badge
@@ -119,6 +117,19 @@ fn process_notifications(
 
 * due to the more complex nature of the types that need to be send in and out this crates uses protobuf for that ([see schema](./rust/bevy_ios_notifications/src/Data.proto))
 * because [winit](https://github.com/rust-windowing/winit) currently does not let you hook into the AppDelegates's `didRegisterForRemoteNotificationsWithDeviceToken` callback we use method swizzling to intercept these ([see code](https://github.com/rustunit/bevy_ios_notifications/blob/49e33b5a389f83ecd48eb6b851145ed57790eb23/Sources/bevy_ios_notifications/bevy_ios_notifications.swift#L177), [see winit PR (dont hold your breath)](https://github.com/rust-windowing/winit/pull/3650))
+
+## Our Other Crates
+
+- [bevy_debug_log](https://github.com/rustunit/bevy_debug_log)
+- [bevy_device_lang](https://github.com/rustunit/bevy_device_lang)
+- [bevy_web_popups](https://github.com/rustunit/bevy_web_popups)
+- [bevy_libgdx_atlas](https://github.com/rustunit/bevy_libgdx_atlas)
+- [bevy_ios_review](https://github.com/rustunit/bevy_ios_review)
+- [bevy_ios_gamecenter](https://github.com/rustunit/bevy_ios_gamecenter)
+- [bevy_ios_alerts](https://github.com/rustunit/bevy_ios_alerts)
+- [bevy_ios_iap](https://github.com/rustunit/bevy_ios_iap)
+- [bevy_ios_impact](https://github.com/rustunit/bevy_ios_impact)
+- [bevy_ios_safearea](https://github.com/rustunit/bevy_ios_safearea)
 
 ## Bevy version support
 
