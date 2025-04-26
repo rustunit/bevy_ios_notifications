@@ -39,12 +39,12 @@ Go to `File` -> `Add Package Dependencies` and paste `https://github.com/rustuni
 
 ```
 cargo add bevy_ios_notifications
-``` 
+```
 
-or 
+or
 
 ```
-bevy_ios_notifications = { version = "0.2" }
+bevy_ios_notifications = { version = "0.4" }
 ```
 
 ### 3. Setup Plugin
@@ -77,7 +77,7 @@ fn system_triggering_notifications(ios_notifications: NonSend<IosNotificationsRe
             .identifier("custom id")
             .build(),
     );
-     
+
 }
 
 // this will clear the badge, the notification center and all pending ones
@@ -135,7 +135,8 @@ fn process_notifications(
 
 |bevy|bevy\_ios\_notifications|
 |----|---|
-|0.15|0.3,main|
+|0.16|0.4,main|
+|0.15|0.3|
 |0.14|0.2|
 |0.13|0.1|
 

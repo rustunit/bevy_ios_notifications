@@ -1,11 +1,10 @@
-use std::collections::HashMap;
-
-use bevy::prelude::*;
+use bevy_ecs::prelude::*;
 use builder_pattern::Builder;
+use std::collections::HashMap;
 
 use crate::plugin::IosNotificationPermissions;
 #[cfg(target_os = "ios")]
-use crate::{request, response, NotificationId, Request};
+use crate::{NotificationId, Request, request, response};
 
 #[derive(Default)]
 pub struct IosNotificationTrigger {
@@ -99,41 +98,34 @@ impl From<&String> for NotificationId {
 pub struct IosNotificationsResource;
 
 impl IosNotificationsResource {
-    ///
     #[cfg(target_os = "ios")]
     pub fn get_badge(&self) -> i32 {
         crate::native::badge_get()
     }
 
-    ///
     #[cfg(target_os = "ios")]
     pub fn show_foregrounded(&self) -> bool {
         crate::native::show_foregrounded()
     }
 
-    ///
     #[cfg(not(target_os = "ios"))]
     pub fn show_foregrounded(&self) -> bool {
         true
     }
 
-    ///
     #[cfg(target_os = "ios")]
     pub fn set_show_foregrounded(&self, v: bool) {
         crate::native::set_show_foregrounded(v)
     }
 
-    ///
     #[cfg(not(target_os = "ios"))]
     pub fn set_show_foregrounded(&self, _v: bool) {}
 
-    ///
     #[cfg(target_os = "ios")]
     pub fn registered_for_push(&self) -> bool {
         crate::native::registered_for_push()
     }
 
-    ///
     #[cfg(not(target_os = "ios"))]
     pub fn registered_for_push(&self) -> bool {
         false
@@ -144,17 +136,14 @@ impl IosNotificationsResource {
         0
     }
 
-    ///
     #[cfg(target_os = "ios")]
     pub fn set_badge(&self, v: i32) {
         crate::native::badge_set(v);
     }
 
-    ///
     #[cfg(not(target_os = "ios"))]
     pub fn set_badge(&self, _v: i32) {}
 
-    ///
     #[cfg(target_os = "ios")]
     pub fn schedule(request: IosNotificationRequest) -> String {
         let res = crate::native::request(Request {
@@ -206,7 +195,6 @@ impl IosNotificationsResource {
         });
     }
 
-    ///
     #[cfg(target_os = "ios")]
     pub fn remove_pending(&self, ids: &[String]) {
         #[cfg(target_os = "ios")]
@@ -223,7 +211,6 @@ impl IosNotificationsResource {
     #[cfg(not(target_os = "ios"))]
     pub fn remove_pending(&self, _ids: &[String]) {}
 
-    ///
     #[cfg(target_os = "ios")]
     pub fn remove_delivered(&self, ids: &[String]) {
         crate::native::request(Request {
@@ -236,11 +223,10 @@ impl IosNotificationsResource {
         });
     }
 
-    ///
     #[cfg(not(target_os = "ios"))]
     pub fn remove_delivered(&self, _ids: &[String]) {}
 
-    ///
+    /// remove all pending notifications
     pub fn remove_all_pending(&self) {
         #[cfg(target_os = "ios")]
         crate::native::request(Request {
@@ -250,7 +236,7 @@ impl IosNotificationsResource {
         });
     }
 
-    ///
+    /// remove all delivered notifications
     pub fn remove_all_delivered(&self) {
         #[cfg(target_os = "ios")]
         crate::native::request(Request {

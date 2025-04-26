@@ -3,13 +3,11 @@
 use std::ffi;
 
 use crate::{
-    channel, plugin::IosRemoteNotificationRegistration, AsyncEvent, IosNotificationEvents,
-    IosNotificationResponse, Request, Response,
+    AsyncEvent, IosNotificationEvents, IosNotificationResponse, Request, Response, channel,
+    plugin::IosRemoteNotificationRegistration,
 };
-use bevy::prelude::*;
-use prost::{bytes::BytesMut, Message};
-
 use block2::{Block, RcBlock};
+use prost::{Message, bytes::BytesMut};
 
 extern "C" {
     fn swift_notifications_init(cb: &Block<dyn Fn(*const ffi::c_uchar, ffi::c_uint) -> ()>);
