@@ -1,4 +1,4 @@
-#![allow(temporary_cstring_as_ptr)]
+#![allow(dangling_pointers_from_temporaries)]
 
 use std::ffi;
 
@@ -9,7 +9,7 @@ use crate::{
 use block2::{Block, RcBlock};
 use prost::{Message, bytes::BytesMut};
 
-extern "C" {
+unsafe extern "C" {
     fn swift_notifications_init(cb: &Block<dyn Fn(*const ffi::c_uchar, ffi::c_uint) -> ()>);
     fn swift_notifications_badge_set(number: i32);
     fn swift_notifications_badge_get() -> i32;
@@ -59,7 +59,7 @@ pub fn init() {
             };
 
             if let Some(e) = response {
-                debug!("forward native event: {e:?}");
+                bevy_log::debug!("forward native event: {e:?}");
                 channel::send_event(e);
             }
         }
@@ -135,7 +135,7 @@ pub fn request(request: Request) -> Response {
         );
 
         if !result {
-            error!("request failed");
+            bevy_log::error!("request failed");
         }
 
         buffer.set_len(data_out as usize);

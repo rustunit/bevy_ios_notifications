@@ -6,7 +6,7 @@ static SENDER: OnceLock<Option<CrossbeamEventSender<IosNotificationEvents>>> = O
 
 pub fn send_event(e: IosNotificationEvents) {
     let Some(sender) = SENDER.get().map(Option::as_ref).flatten() else {
-        return bevy::log::error!(
+        return bevy_log::error!(
             "`IosNotificationsPlugin` not installed correctly (no sender found)"
         );
     };
