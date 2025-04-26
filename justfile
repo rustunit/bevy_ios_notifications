@@ -1,7 +1,5 @@
-build:
-	cd rust/bevy_ios_notifications/src && cargo b
-	cd rust/bevy_ios_notifications/src && cargo b --target aarch64-apple-ios
-	cd rust/bevy_ios_notifications/src && protoc --swift_out=../../../Sources/bevy_ios_notifications Data.proto
+check:
+	cd rust/bevy_ios_notifications && just check
 
 publish:
 	cd rust/bevy_ios_notifications/ && cargo publish

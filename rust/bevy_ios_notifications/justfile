@@ -1,0 +1,8 @@
+proto:
+    cd src && protoc --swift_out=../../../Sources/bevy_ios_notifications Data.proto
+
+check: proto
+	cargo c
+	cargo c --target aarch64-apple-ios
+	cargo clippy
+	cargo fmt -- --check
