@@ -1,6 +1,6 @@
 [package]
 name = "bevy_ios_notifications"
-version = "0.4.0"
+version = "0.5.0"
 edition = "2024"
 readme = "../../README.md"
 license = "MIT"
@@ -14,13 +14,13 @@ description = "Bevy plugin to interact with iOS Notifications API"
 default-target = "x86_64-apple-ios"
 
 [dependencies]
-bevy_app = { version = "0.16", default-features = false }
-bevy_ecs = { version = "0.16", default-features = false }
-bevy_log = { version = "0.16", default-features = false }
+bevy_app = { version = "0.17", default-features = false }
+bevy_ecs = { version = "0.17", default-features = false }
+bevy_log = { version = "0.17", default-features = false }
 builder-pattern = { version = "0.4", default-features = false }
 
 [target.'cfg(target_os = "ios")'.dependencies]
-bevy_crossbeam_event = "0.8"
+bevy_crossbeam_event = "0.9"
 block2 = "0.5"
 prost = "0.12"
 
