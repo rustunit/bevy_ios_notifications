@@ -25,7 +25,7 @@ pub enum IosRemoteNotificationRegistration {
     DeviceToken(String),
 }
 
-#[derive(Event, Clone, Debug)]
+#[derive(Message, Clone, Debug)]
 pub enum IosNotificationEvents {
     PermissionResponse(bool),
     NotificationSchedulingSucceeded(String),
@@ -60,7 +60,7 @@ impl Plugin for IosNotificationsPlugin {
 
         #[cfg(not(target_os = "ios"))]
         {
-            app.add_event::<IosNotificationEvents>();
+            app.add_message::<IosNotificationEvents>();
         }
 
         #[cfg(target_os = "ios")]
@@ -79,13 +79,13 @@ impl Plugin for IosNotificationsPlugin {
                 });
             }
 
-            use bevy_crossbeam_event::{CrossbeamEventApp, CrossbeamEventSender};
+            use bevy_channel_message::{ChannelMessageApp, ChannelMessageSender};
 
-            app.add_crossbeam_event::<IosNotificationEvents>();
+            app.add_channel_message::<IosNotificationEvents>();
 
             let sender = app
                 .world()
-                .get_resource::<CrossbeamEventSender<IosNotificationEvents>>()
+                .get_resource::<ChannelMessageSender<IosNotificationEvents>>()
                 .unwrap()
                 .clone();
 

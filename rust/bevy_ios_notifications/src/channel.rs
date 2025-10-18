@@ -1,8 +1,8 @@
 use crate::IosNotificationEvents;
-use bevy_crossbeam_event::CrossbeamEventSender;
+use bevy_channel_message::ChannelMessageSender;
 use std::sync::OnceLock;
 
-static SENDER: OnceLock<Option<CrossbeamEventSender<IosNotificationEvents>>> = OnceLock::new();
+static SENDER: OnceLock<Option<ChannelMessageSender<IosNotificationEvents>>> = OnceLock::new();
 
 pub fn send_event(e: IosNotificationEvents) {
     let Some(sender) = SENDER.get().map(Option::as_ref).flatten() else {
@@ -13,6 +13,6 @@ pub fn send_event(e: IosNotificationEvents) {
     sender.send(e);
 }
 
-pub fn set_sender(sender: CrossbeamEventSender<IosNotificationEvents>) {
+pub fn set_sender(sender: ChannelMessageSender<IosNotificationEvents>) {
     while SENDER.set(Some(sender.clone())).is_err() {}
 }
