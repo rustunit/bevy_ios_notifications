@@ -58,11 +58,6 @@ impl Plugin for IosNotificationsPlugin {
     fn build(&self, app: &mut App) {
         app.init_non_send_resource::<IosNotificationsResource>();
 
-        #[cfg(not(target_os = "ios"))]
-        {
-            app.add_event::<IosNotificationEvents>();
-        }
-
         #[cfg(target_os = "ios")]
         {
             crate::native::init();
