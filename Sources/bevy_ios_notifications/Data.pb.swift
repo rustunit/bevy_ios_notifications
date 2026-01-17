@@ -550,9 +550,7 @@ fileprivate let _protobuf_package = "bevy_ios.notifications"
 
 extension BevyIos_Notifications_NotificationId: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".NotificationId"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "identifier"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -582,15 +580,7 @@ extension BevyIos_Notifications_NotificationId: SwiftProtobuf.Message, SwiftProt
 
 extension BevyIos_Notifications_Request: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".Request"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "permissions"),
-    2: .same(proto: "schedule"),
-    3: .same(proto: "pending"),
-    4: .same(proto: "removePending"),
-    5: .same(proto: "removeDelivered"),
-    6: .same(proto: "removeAllPending"),
-    7: .same(proto: "removeAllDelivered"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}permissions\0\u{1}schedule\0\u{1}pending\0\u{1}removePending\0\u{1}removeDelivered\0\u{1}removeAllPending\0\u{1}removeAllDelivered\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -742,19 +732,7 @@ extension BevyIos_Notifications_Request: SwiftProtobuf.Message, SwiftProtobuf._M
 
 extension BevyIos_Notifications_Request.Schedule: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_Request.protoMessageName + ".Schedule"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "title"),
-    2: .same(proto: "body"),
-    3: .same(proto: "categoryIdentifier"),
-    4: .same(proto: "subtitle"),
-    5: .same(proto: "relevanceScore"),
-    6: .same(proto: "threadIdentifier"),
-    7: .same(proto: "filterCriteria"),
-    8: .same(proto: "userData"),
-    9: .same(proto: "identifier"),
-    10: .same(proto: "badge"),
-    11: .same(proto: "trigger"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}title\0\u{1}body\0\u{1}categoryIdentifier\0\u{1}subtitle\0\u{1}relevanceScore\0\u{1}threadIdentifier\0\u{1}filterCriteria\0\u{1}userData\0\u{1}identifier\0\u{1}badge\0\u{1}trigger\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -838,10 +816,7 @@ extension BevyIos_Notifications_Request.Schedule: SwiftProtobuf.Message, SwiftPr
 
 extension BevyIos_Notifications_Request.Schedule.Trigger: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_Request.Schedule.protoMessageName + ".Trigger"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "repeat"),
-    2: .same(proto: "seconds"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}repeat\0\u{1}seconds\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -933,9 +908,7 @@ extension BevyIos_Notifications_Request.RemoveAllDelivered: SwiftProtobuf.Messag
 
 extension BevyIos_Notifications_Request.RemovePending: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_Request.protoMessageName + ".RemovePending"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "items"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}items\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -965,9 +938,7 @@ extension BevyIos_Notifications_Request.RemovePending: SwiftProtobuf.Message, Sw
 
 extension BevyIos_Notifications_Request.RemoveDelivered: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_Request.protoMessageName + ".RemoveDelivered"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "items"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}items\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -997,11 +968,7 @@ extension BevyIos_Notifications_Request.RemoveDelivered: SwiftProtobuf.Message, 
 
 extension BevyIos_Notifications_Request.Permissions: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_Request.protoMessageName + ".Permissions"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "alert"),
-    2: .same(proto: "sound"),
-    3: .same(proto: "badge"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}alert\0\u{1}sound\0\u{1}badge\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1041,9 +1008,7 @@ extension BevyIos_Notifications_Request.Permissions: SwiftProtobuf.Message, Swif
 
 extension BevyIos_Notifications_UserData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".UserData"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "data"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}data\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1073,10 +1038,7 @@ extension BevyIos_Notifications_UserData: SwiftProtobuf.Message, SwiftProtobuf._
 
 extension BevyIos_Notifications_Response: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".Response"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "schedule"),
-    2: .same(proto: "pending"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}schedule\0\u{1}pending\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1143,9 +1105,7 @@ extension BevyIos_Notifications_Response: SwiftProtobuf.Message, SwiftProtobuf._
 
 extension BevyIos_Notifications_Response.Schedule: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_Response.protoMessageName + ".Schedule"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "identifier"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1194,14 +1154,7 @@ extension BevyIos_Notifications_Response.Pending: SwiftProtobuf.Message, SwiftPr
 
 extension BevyIos_Notifications_AsyncEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".AsyncEvent"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "permission"),
-    2: .same(proto: "scheduled"),
-    3: .same(proto: "pending"),
-    4: .same(proto: "triggeredWhileRunning"),
-    5: .same(proto: "notificationResponse"),
-    6: .same(proto: "remoteNotificationRegistration"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}permission\0\u{1}scheduled\0\u{1}pending\0\u{1}triggeredWhileRunning\0\u{1}notificationResponse\0\u{1}remoteNotificationRegistration\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1336,9 +1289,7 @@ extension BevyIos_Notifications_AsyncEvent: SwiftProtobuf.Message, SwiftProtobuf
 
 extension BevyIos_Notifications_AsyncEvent.Pending: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.protoMessageName + ".Pending"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "items"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}items\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1368,9 +1319,7 @@ extension BevyIos_Notifications_AsyncEvent.Pending: SwiftProtobuf.Message, Swift
 
 extension BevyIos_Notifications_AsyncEvent.Pending.PendingNotification: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.Pending.protoMessageName + ".PendingNotification"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "identifier"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1400,11 +1349,7 @@ extension BevyIos_Notifications_AsyncEvent.Pending.PendingNotification: SwiftPro
 
 extension BevyIos_Notifications_AsyncEvent.Scheduled: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.protoMessageName + ".Scheduled"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "identifier"),
-    2: .same(proto: "success"),
-    3: .same(proto: "error"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0\u{1}success\0\u{1}error\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1444,9 +1389,7 @@ extension BevyIos_Notifications_AsyncEvent.Scheduled: SwiftProtobuf.Message, Swi
 
 extension BevyIos_Notifications_AsyncEvent.Permission: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.protoMessageName + ".Permission"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "granted"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}granted\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1476,10 +1419,7 @@ extension BevyIos_Notifications_AsyncEvent.Permission: SwiftProtobuf.Message, Sw
 
 extension BevyIos_Notifications_AsyncEvent.NotificationResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.protoMessageName + ".NotificationResponse"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "identifier"),
-    2: .same(proto: "actionIdentifier"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0\u{1}actionIdentifier\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1514,9 +1454,7 @@ extension BevyIos_Notifications_AsyncEvent.NotificationResponse: SwiftProtobuf.M
 
 extension BevyIos_Notifications_AsyncEvent.NotificationWhileRunning: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.protoMessageName + ".NotificationWhileRunning"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "identifier"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}identifier\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1546,10 +1484,7 @@ extension BevyIos_Notifications_AsyncEvent.NotificationWhileRunning: SwiftProtob
 
 extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.protoMessageName + ".RemoteNotificationRegistration"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "failed"),
-    2: .same(proto: "token"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}failed\0\u{1}token\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1616,9 +1551,7 @@ extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration: Swift
 
 extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.DeviceToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.protoMessageName + ".DeviceToken"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "token"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}token\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -1648,10 +1581,7 @@ extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Device
 
 extension BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.Failed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = BevyIos_Notifications_AsyncEvent.RemoteNotificationRegistration.protoMessageName + ".Failed"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "localizedDescription"),
-    2: .same(proto: "code"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}localizedDescription\0\u{1}code\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
