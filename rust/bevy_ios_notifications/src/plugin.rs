@@ -56,7 +56,7 @@ impl IosNotificationsPlugin {
 
 impl Plugin for IosNotificationsPlugin {
     fn build(&self, app: &mut App) {
-        app.init_non_send_resource::<IosNotificationsResource>();
+        app.init_non_send::<IosNotificationsResource>();
 
         #[cfg(not(target_os = "ios"))]
         {
