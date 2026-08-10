@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.8.0] - 2026-08-09
+
+### Changed
+* call `UserNotifications` directly via `objc2`, the Swift package dependency is gone
+* the XCode setup step (adding the SPM package) is no longer needed
+* repo flattened: the crate now lives at the repository root
+* the protobuf bridge between Rust and Swift is gone, and with it the `prost`/`prost-build`
+  dependencies and the `protoc` build requirement
+* `filter_criteria` is now actually applied to the notification - the Swift side used to drop it
+  (needs iOS 16 or newer, it is ignored with a warning below that)
+* the message channel is now installed before the first call into the native side, so the response
+  to `IosNotificationsPlugin::request_permissions_on_start` can no longer be dropped
+
+### Added
+* `IosNotificationPermissions` is exported - `IosNotificationsResource::request_permissions` takes
+  it, but there was no way to name the type
+
+### Fixed
+* the foreground presentation completion handler is now always called, not only while
+  `show_foregrounded` is on. Withholding it made the system log and stall on every notification
+  that fired with presentation disabled
+* building the plugin twice no longer hangs in an endless loop while installing the sender
+
+### Removed
+* a notification presented while the app is in the foreground no longer implicitly calls
+  `registerForRemoteNotifications` - use `IosNotificationsResource::register_for_push` for that
+* the generated protobuf types. They were the wire format of the Swift bridge, but `include!`ed at
+  the crate root, so on iOS builds `Request`, `Response`, `AsyncEvent`, `NotificationId`, `UserData`
+  and the `request`/`response`/`async_event` modules were public. Nothing else in the API changed
+
 ## [0.7.0] - 2026-08-09
 
 ### Changed

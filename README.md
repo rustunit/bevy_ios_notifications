@@ -8,7 +8,9 @@
 [sh_discord]: https://img.shields.io/discord/1176858176897953872?label=discord&color=5561E6
 [lk_discord]: https://discord.gg/rQNeEnMhus
 
-Rust crate and Swift package to easily integrate iOS's native Notification API into a Bevy application.
+Rust crate to easily integrate iOS's native Notification API into a Bevy application.
+
+Talks to `UserNotifications` directly via [objc2](https://github.com/madsmtm/objc2) - no Swift package or XCode setup required.
 
 https://github.com/rustunit/bevy_ios_notifications/assets/776816/78e9d708-1cdd-4e54-af2a-c6a5b787f98b
 
@@ -24,18 +26,12 @@ Demo from our game using this crate: [zoolitaire.com](https://zoolitaire.com)
 
 ## Instructions
 
-1. Add to XCode: Add SPM (Swift Package Manager) dependency
-2. Add Rust dependency
-3. Setup Plugin
+1. Add Rust dependency
+2. Setup Plugin
 
 Use [Apple Push Notification Dashboard](https://icloud.developer.apple.com/dashboard/notifications) to simply send push notifications for testing.
 
-### 1. Add to XCode
-
-Go to `File` -> `Add Package Dependencies` and paste `https://github.com/rustunit/bevy_ios_notifications.git` into the search bar on the top right:
-![xcode](./assets/xcode-spm.png)
-
-### 2. Add Rust dependency
+### 1. Add Rust dependency
 
 ```
 cargo add bevy_ios_notifications
@@ -44,10 +40,10 @@ cargo add bevy_ios_notifications
 or
 
 ```
-bevy_ios_notifications = { version = "0.7" }
+bevy_ios_notifications = { version = "0.8" }
 ```
 
-### 3. Setup Plugin
+### 2. Setup Plugin
 
 Initialize Bevy Plugin:
 
@@ -82,7 +78,7 @@ fn system_triggering_notifications(ios_notifications: NonSend<IosNotificationsRe
 
 // this will clear the badge, the notification center and all pending ones
 fn process_occluded_events(
-    mut e: EventReader<WindowOccluded>,
+    mut e: MessageReader<WindowOccluded>,
     ios_notifications: NonSend<IosNotificationsResource>,
 ) {
     for ev in e.read() {
@@ -96,7 +92,7 @@ fn process_occluded_events(
 
 // process async events coming in from ios notification system
 fn process_notifications(
-    mut events: EventReader<IosNotificationEvents>,
+    mut events: MessageReader<IosNotificationEvents>,
 ) {
     for e in events.read() {
         match e {
@@ -115,8 +111,9 @@ fn process_notifications(
 
 ## Implementation Details
 
-* due to the more complex nature of the types that need to be send in and out this crates uses protobuf for that ([see schema](./rust/bevy_ios_notifications/src/Data.proto))
-* because [winit](https://github.com/rust-windowing/winit) currently does not let you hook into the AppDelegates's `didRegisterForRemoteNotificationsWithDeviceToken` callback we use method swizzling to intercept these ([see code](https://github.com/rustunit/bevy_ios_notifications/blob/49e33b5a389f83ecd48eb6b851145ed57790eb23/Sources/bevy_ios_notifications/bevy_ios_notifications.swift#L177), [see winit PR (dont hold your breath)](https://github.com/rust-windowing/winit/pull/3650))
+* `UNUserNotificationCenter` is called directly through [objc2](https://github.com/madsmtm/objc2), the delegate that receives triggered notifications and their responses is a Rust class ([see code](./src/native.rs))
+* device tokens are only handed to the `UIApplicationDelegate`, and [winit](https://github.com/rust-windowing/winit) still does not let you hook into its `didRegisterForRemoteNotificationsWithDeviceToken` callback ([see winit PR (dont hold your breath)](https://github.com/rust-windowing/winit/pull/3650)). So we graft the two remote registration callbacks onto whatever app delegate exists and install our own if there is none ([see code](./src/push.rs))
+* this composes with [bevy_ios_app_delegate](https://github.com/rustunit/bevy_ios_app_delegate): if it already installed a delegate we hook that one instead of setting up a second, and an implementation we displace is still called
 
 ## Our Other Crates
 
@@ -135,7 +132,7 @@ fn process_notifications(
 
 |bevy|bevy\_ios\_notifications|
 |----|---|
-|0.19|0.7,main|
+|0.19|0.7,0.8,main|
 |0.18|0.6|
 |0.17|0.5|
 |0.16|0.4|
