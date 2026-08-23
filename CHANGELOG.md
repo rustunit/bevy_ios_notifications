@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   any system, so it silently did nothing when the executor happened to pick a worker thread. As
   methods on `IosNotifications` the main thread is guaranteed at compile time
 
+### Added
+* `IosNotificationRequest::sound` - `UNNotificationContent.sound` was never set, so every
+  notification was delivered silently and the sound authorization the plugin asks for bought
+  nothing. `IosNotificationSound::Default` plays the system sound, `IosNotificationSound::Named`
+  a sound file bundled with the app. It is opt-in: without it delivery stays silent as before
+
 ## [0.8.0] - 2026-08-09
 
 ### Changed

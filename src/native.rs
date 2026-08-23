@@ -18,12 +18,15 @@ use objc2_ui_kit::UIApplication;
 use objc2_user_notifications::{
     UNAuthorizationOptions, UNMutableNotificationContent, UNNotification,
     UNNotificationPresentationOptions, UNNotificationRequest, UNNotificationResponse,
-    UNTimeIntervalNotificationTrigger, UNUserNotificationCenter, UNUserNotificationCenterDelegate,
+    UNNotificationSound, UNTimeIntervalNotificationTrigger, UNUserNotificationCenter,
+    UNUserNotificationCenterDelegate,
 };
 
 use crate::channel::send_event;
 use crate::plugin::IosNotificationPermissions;
-use crate::{IosNotificationEvents, IosNotificationRequest, IosNotificationResponse};
+use crate::{
+    IosNotificationEvents, IosNotificationRequest, IosNotificationResponse, IosNotificationSound,
+};
 
 /// Whether a notification that fires while the app is in the foreground is presented by the system.
 static SHOW_IN_FOREGROUND: AtomicBool = AtomicBool::new(false);
@@ -160,6 +163,16 @@ fn content(request: IosNotificationRequest) -> Retained<UNMutableNotificationCon
 
     if let Some(badge) = request.badge {
         content.setBadge(Some(&NSNumber::numberWithInt(badge)));
+    }
+
+    if let Some(sound) = &request.sound {
+        let sound = match sound {
+            IosNotificationSound::Default => UNNotificationSound::defaultSound(),
+            IosNotificationSound::Named(name) => {
+                UNNotificationSound::soundNamed(&NSString::from_str(name))
+            }
+        };
+        content.setSound(Some(&sound));
     }
 
     if let Some(criteria) = &request.filter_criteria {

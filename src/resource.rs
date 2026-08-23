@@ -26,6 +26,22 @@ impl IosNotificationTrigger {
     }
 }
 
+#[derive(Clone, Debug)]
+pub enum IosNotificationSound {
+    Default,
+    /// name of a sound file bundled with the app, e.g. `"chime.caf"`
+    Named(String),
+}
+
+/// ```rust
+/// use bevy_ios_notifications::{IosNotificationRequest, IosNotificationSound};
+///
+/// let request = IosNotificationRequest::new()
+///     .title("title")
+///     .body("body")
+///     .sound(IosNotificationSound::Default)
+///     .build();
+/// ```
 #[derive(Builder)]
 pub struct IosNotificationRequest {
     #[into]
@@ -56,6 +72,10 @@ pub struct IosNotificationRequest {
     #[default(None)]
     #[into]
     pub badge: Option<i32>,
+    /// `None` delivers the notification silently
+    #[default(None)]
+    #[into]
+    pub sound: Option<IosNotificationSound>,
     #[default(None)]
     #[into]
     pub trigger: Option<IosNotificationTrigger>,

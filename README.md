@@ -69,6 +69,8 @@ fn system_triggering_notifications(ios_notifications: IosNotifications) {
             .title("title")
             .body("body")
             .trigger(IosNotificationTrigger::one_shot(4))
+            // without this the notification is delivered silently
+            .sound(IosNotificationSound::Default)
             // if not defined it will be creating a UUID for you
             .identifier("custom id")
             .build(),
