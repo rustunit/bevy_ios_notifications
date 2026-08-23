@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.8.0] - 2026-08-09
+
 ### Changed
 * `IosNotificationsResource` is now `IosNotifications`, a `SystemParam` - take it directly instead
   of through `NonSend`:
@@ -23,23 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reaches UIKit and only works on the main thread; as associated functions they were callable from
   any system, so it silently did nothing when the executor happened to pick a worker thread. As
   methods on `IosNotifications` the main thread is guaranteed at compile time
-
-### Added
-* `IosNotificationRequest::sound` - `UNNotificationContent.sound` was never set, so every
-  notification was delivered silently and the sound authorization the plugin asks for bought
-  nothing. `IosNotificationSound::Default` plays the system sound, `IosNotificationSound::Named`
-  a sound file bundled with the app. It is opt-in: without it delivery stays silent as before
-
-### Fixed
-* scheduling with a non-positive interval, or a repeating one below 60 seconds, no longer aborts
-  the app. `UNTimeIntervalNotificationTrigger` raises for those, and an Objective-C exception
-  unwinding through Rust frames cannot be recovered from - `IosNotificationTrigger::one_shot(0)`
-  was enough to hit it. Such triggers are now rejected before the call, with a logged error and a
-  `NotificationSchedulingFailed` event carrying the identifier
-
-## [0.8.0] - 2026-08-09
-
-### Changed
 * call `UserNotifications` directly via `objc2`, the Swift package dependency is gone
 * the XCode setup step (adding the SPM package) is no longer needed
 * repo flattened: the crate now lives at the repository root
@@ -51,10 +36,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to `IosNotificationsPlugin::request_permissions_on_start` can no longer be dropped
 
 ### Added
-* `IosNotificationPermissions` is exported - `IosNotificationsResource::request_permissions` takes
-  it, but there was no way to name the type
+* `IosNotificationRequest::sound` - `UNNotificationContent.sound` was never set, so every
+  notification was delivered silently and the sound authorization the plugin asks for bought
+  nothing. `IosNotificationSound::Default` plays the system sound, `IosNotificationSound::Named`
+  a sound file bundled with the app. It is opt-in: without it delivery stays silent as before
+* `IosNotificationPermissions` is exported - `IosNotifications::request_permissions` takes it, but
+  there was no way to name the type
 
 ### Fixed
+* scheduling with a non-positive interval, or a repeating one below 60 seconds, no longer aborts
+  the app. `UNTimeIntervalNotificationTrigger` raises for those, and an Objective-C exception
+  unwinding through Rust frames cannot be recovered from - `IosNotificationTrigger::one_shot(0)`
+  was enough to hit it. Such triggers are now rejected before the call, with a logged error and a
+  `NotificationSchedulingFailed` event carrying the identifier
 * the foreground presentation completion handler is now always called, not only while
   `show_foregrounded` is on. Withholding it made the system log and stall on every notification
   that fired with presentation disabled
@@ -62,7 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 * a notification presented while the app is in the foreground no longer implicitly calls
-  `registerForRemoteNotifications` - use `IosNotificationsResource::register_for_push` for that
+  `registerForRemoteNotifications` - use `IosNotifications::register_for_push` for that
 * the generated protobuf types. They were the wire format of the Swift bridge, but `include!`ed at
   the crate root, so on iOS builds `Request`, `Response`, `AsyncEvent`, `NotificationId`, `UserData`
   and the `request`/`response`/`async_event` modules were public. Nothing else in the API changed

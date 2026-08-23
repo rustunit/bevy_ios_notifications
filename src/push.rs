@@ -128,6 +128,8 @@ unsafe fn hook(class: &AnyClass, sel: Sel, imp: Imp) -> Option<Imp> {
 
     if !added.as_bool() {
         bevy_log::error!("could not add `{sel}` to the app delegate, no device token will arrive");
+        // nothing was installed, so there is nothing in front of `inherited` to chain from
+        return None;
     }
 
     inherited

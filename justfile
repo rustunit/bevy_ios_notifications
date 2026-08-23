@@ -6,6 +6,7 @@ check:
     cargo clippy
     cargo clippy --target=aarch64-apple-ios
     cargo clippy --target=aarch64-apple-ios-sim
+    cargo test
 
 publish:
     cargo publish
