@@ -1,7 +1,7 @@
 use bevy_app::prelude::*;
 use bevy_ecs::prelude::*;
 
-use crate::IosNotificationsResource;
+use crate::resource::IosNotificationsNonSendResource;
 
 #[derive(Clone, Debug, Default)]
 pub struct IosNotificationPermissions {
@@ -56,7 +56,7 @@ impl IosNotificationsPlugin {
 
 impl Plugin for IosNotificationsPlugin {
     fn build(&self, app: &mut App) {
-        app.init_non_send::<IosNotificationsResource>();
+        app.init_non_send::<IosNotificationsNonSendResource>();
 
         #[cfg(not(target_os = "ios"))]
         {
@@ -65,20 +65,6 @@ impl Plugin for IosNotificationsPlugin {
 
         #[cfg(target_os = "ios")]
         {
-            crate::native::init();
-
-            if let Some(permissions) = &self.permissions {
-                crate::native::request(crate::Request {
-                    calls: Some(crate::request::Calls::Permissions(
-                        crate::request::Permissions {
-                            alert: permissions.alert,
-                            sound: permissions.sound,
-                            badge: permissions.badge,
-                        },
-                    )),
-                });
-            }
-
             use bevy_channel_message::{ChannelMessageApp, ChannelMessageSender};
 
             app.add_channel_message::<IosNotificationEvents>();
@@ -89,7 +75,15 @@ impl Plugin for IosNotificationsPlugin {
                 .unwrap()
                 .clone();
 
+            // has to happen before the first call into `native`, otherwise an answer that arrives
+            // right away - the permission response below - has nowhere to go
             crate::channel::set_sender(sender);
+
+            crate::native::init();
+
+            if let Some(permissions) = &self.permissions {
+                crate::native::request_permissions(permissions);
+            }
         }
     }
 }

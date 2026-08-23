@@ -1,0 +1,53 @@
+[package]
+name = "bevy_ios_notifications"
+version = "0.8.0"
+edition = "2024"
+readme = "README.md"
+license = "MIT"
+authors = ["extrawurst <mail@rusticorn.com>"]
+documentation = "https://docs.rs/bevy_ios_notifications"
+repository = "https://github.com/rustunit/bevy_ios_notifications"
+keywords = ["bevy", "gamedev", "mobile", "ios", "objc2"]
+description = "Bevy plugin to interact with iOS Notifications API"
+
+[package.metadata.docs.rs]
+default-target = "x86_64-apple-darwin"
+
+[dependencies]
+bevy_app = { version = "0.19", default-features = false }
+bevy_ecs = { version = "0.19", default-features = false }
+bevy_log = { version = "0.19", default-features = false }
+builder-pattern = { version = "0.4", default-features = false }
+
+[target.'cfg(target_os = "ios")'.dependencies]
+bevy_channel_message = "0.3"
+objc2 = { version = "0.6", default-features = false, features = ["std"] }
+block2 = { version = "0.6", default-features = false, features = ["std"] }
+objc2-foundation = { version = "0.3", default-features = false, features = [
+    "std",
+    "NSArray",
+    "NSDictionary",
+    "NSData",
+    "NSEnumerator",
+    "NSError",
+    "NSObject",
+    "NSString",
+    "NSUUID",
+    "NSValue",
+] }
+objc2-user-notifications = { version = "0.3", default-features = false, features = [
+    "std",
+    "block2",
+    "UNNotification",
+    "UNNotificationContent",
+    "UNNotificationRequest",
+    "UNNotificationResponse",
+    "UNNotificationSound",
+    "UNNotificationTrigger",
+    "UNUserNotificationCenter",
+] }
+objc2-ui-kit = { version = "0.3", default-features = false, features = [
+    "std",
+    "UIApplication",
+    "UIResponder",
+] }

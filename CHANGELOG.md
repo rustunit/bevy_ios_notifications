@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.8.0] - 2026-08-09
+
+### Changed
+* the XCode setup step (adding the SPM package) is no longer needed
+* call `UserNotifications` directly via `objc2`, the Swift package dependency is gone
+* the protobuf bridge between Rust and Swift is gone
+* `IosNotificationsResource` is now `IosNotifications`, a `SystemParam` - take it directly instead
+  of through `NonSend`:
+
+  ```rust
+  fn system(notifications: IosNotifications) { .. }
+  ```
+* `register_for_push` and `schedule` take `&self` like every other method.
+* `filter_criteria` is now actually applied to the notification
+* the message channel is now installed before the first call into the native side, so the response
+  to `IosNotificationsPlugin::request_permissions_on_start` can no longer be dropped
+
+### Added
+* support for `IosNotificationRequest::sound`
+* `IosNotificationPermissions` is exported now
+
+### Fixed
+* scheduling with a non-positive interval, or a repeating one below 60 seconds, no longer aborts.
+* the foreground presentation completion handler is now always called, not only while `show_foregrounded` is on.
+* building the plugin twice no longer hangs in an endless loop while installing the sender
+
+### Removed
+* a notification presented while the app is in the foreground no longer implicitly calls `registerForRemoteNotifications`
+
 ## [0.7.0] - 2026-08-09
 
 ### Changed
