@@ -198,6 +198,31 @@ pub fn schedule(request: IosNotificationRequest) -> String {
         .clone()
         .unwrap_or_else(|| NSUUID::new().UUIDString().to_string());
 
+    if let Some(trigger) = &request.trigger {
+        // `triggerWithTimeInterval:repeats:` raises below these, and an Objective-C exception
+        // unwinding through Rust frames aborts the app - so it has to be caught before the call
+        let (minimum, why) = if trigger.repeat {
+            (60., "a repeating trigger needs at least 60 seconds")
+        } else {
+            (f64::MIN_POSITIVE, "a trigger needs a positive interval")
+        };
+
+        // phrased as validity rather than `!(seconds < minimum)` so NaN is rejected too
+        let valid = trigger.seconds >= minimum;
+
+        if !valid {
+            bevy_log::error!(
+                "scheduling `{identifier}` failed: {why}, got {}",
+                trigger.seconds
+            );
+            send_event(IosNotificationEvents::NotificationSchedulingFailed(
+                identifier.clone(),
+            ));
+
+            return identifier;
+        }
+    }
+
     let trigger = request.trigger.as_ref().map(|trigger| {
         UNTimeIntervalNotificationTrigger::triggerWithTimeInterval_repeats(
             trigger.seconds,

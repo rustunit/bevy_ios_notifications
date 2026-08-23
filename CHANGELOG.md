@@ -30,6 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   nothing. `IosNotificationSound::Default` plays the system sound, `IosNotificationSound::Named`
   a sound file bundled with the app. It is opt-in: without it delivery stays silent as before
 
+### Fixed
+* scheduling with a non-positive interval, or a repeating one below 60 seconds, no longer aborts
+  the app. `UNTimeIntervalNotificationTrigger` raises for those, and an Objective-C exception
+  unwinding through Rust frames cannot be recovered from - `IosNotificationTrigger::one_shot(0)`
+  was enough to hit it. Such triggers are now rejected before the call, with a logged error and a
+  `NotificationSchedulingFailed` event carrying the identifier
+
 ## [0.8.0] - 2026-08-09
 
 ### Changed

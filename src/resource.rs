@@ -4,6 +4,8 @@ use std::collections::HashMap;
 
 use crate::plugin::IosNotificationPermissions;
 
+/// `seconds` has to be positive, and at least 60 when `repeat` is set - anything else is rejected
+/// by `schedule` with a logged error and [`crate::IosNotificationEvents::NotificationSchedulingFailed`]
 #[derive(Default)]
 pub struct IosNotificationTrigger {
     pub repeat: bool,
