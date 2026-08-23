@@ -11,4 +11,4 @@ pub use plugin::{
     IosNotificationEvents, IosNotificationPermissions, IosNotificationResponse,
     IosNotificationsPlugin, IosRemoteNotificationRegistration,
 };
-pub use resource::{IosNotificationRequest, IosNotificationTrigger, IosNotificationsResource};
+pub use resource::{IosNotificationRequest, IosNotificationTrigger, IosNotifications};

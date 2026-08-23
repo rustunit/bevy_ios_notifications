@@ -1,4 +1,4 @@
-use bevy_ecs::prelude::*;
+use bevy_ecs::system::{NonSend, SystemParam};
 use builder_pattern::Builder;
 use std::collections::HashMap;
 
@@ -61,10 +61,24 @@ pub struct IosNotificationRequest {
     pub trigger: Option<IosNotificationTrigger>,
 }
 
-#[derive(Resource, Clone, Debug, Default)]
-pub struct IosNotificationsResource;
+#[derive(Default)]
+pub(crate) struct IosNotificationsNonSendResource;
 
-impl IosNotificationsResource {
+/// access to the iOS notification system, pinned to the main thread by its `NonSend`
+///
+/// ```rust
+/// use bevy_ios_notifications::IosNotifications;
+///
+/// fn bevy_system(notifications: IosNotifications) {
+///     notifications.set_badge(0);
+/// }
+/// ```
+#[derive(SystemParam)]
+pub struct IosNotifications<'w> {
+    _non_send: NonSend<'w, IosNotificationsNonSendResource>,
+}
+
+impl IosNotifications<'_> {
     pub fn get_badge(&self) -> i32 {
         #[cfg(target_os = "ios")]
         return crate::native::badge_get();
@@ -98,7 +112,7 @@ impl IosNotificationsResource {
     }
 
     /// will respond async via [`crate::IosNotificationEvents::RemoteNotificationRegistration`]
-    pub fn register_for_push() {
+    pub fn register_for_push(&self) {
         #[cfg(target_os = "ios")]
         crate::native::register_for_push();
     }
@@ -106,7 +120,7 @@ impl IosNotificationsResource {
     /// will respond async via [`crate::IosNotificationEvents::NotificationSchedulingSucceeded`] or
     /// [`crate::IosNotificationEvents::NotificationSchedulingFailed`], carrying the identifier this
     /// returns
-    pub fn schedule(_request: IosNotificationRequest) -> String {
+    pub fn schedule(&self, _request: IosNotificationRequest) -> String {
         #[cfg(target_os = "ios")]
         return crate::native::schedule(_request);
         #[cfg(not(target_os = "ios"))]

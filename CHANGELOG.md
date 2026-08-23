@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+* `IosNotificationsResource` is now `IosNotifications`, a `SystemParam` - take it directly instead
+  of through `NonSend`:
+
+  ```rust
+  fn system(notifications: IosNotifications) { .. }
+  ```
+
+  It was never a `Resource` in practice: the plugin only ever registered it with `init_non_send`,
+  but the derive let it be inserted as one and reached through `Res<_>` from a worker thread,
+  which is the one thing the `NonSend` access exists to prevent. The `Clone` impl was a second
+  way past the same guarantee and is gone too
+* `register_for_push` and `schedule` take `&self` like every other method. `register_for_push`
+  reaches UIKit and only works on the main thread; as associated functions they were callable from
+  any system, so it silently did nothing when the executor happened to pick a worker thread. As
+  methods on `IosNotifications` the main thread is guaranteed at compile time
+
 ## [0.8.0] - 2026-08-09
 
 ### Changed

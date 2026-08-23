@@ -1,7 +1,7 @@
 use bevy_app::prelude::*;
 use bevy_ecs::prelude::*;
 
-use crate::IosNotificationsResource;
+use crate::resource::IosNotificationsNonSendResource;
 
 #[derive(Clone, Debug, Default)]
 pub struct IosNotificationPermissions {
@@ -56,7 +56,7 @@ impl IosNotificationsPlugin {
 
 impl Plugin for IosNotificationsPlugin {
     fn build(&self, app: &mut App) {
-        app.init_non_send::<IosNotificationsResource>();
+        app.init_non_send::<IosNotificationsNonSendResource>();
 
         #[cfg(not(target_os = "ios"))]
         {

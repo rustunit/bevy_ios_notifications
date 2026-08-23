@@ -55,7 +55,7 @@ app.add_plugins(bevy_ios_notifications::IosNotificationsPlugin::request_permissi
 Trigger Alert in your application code:
 
 ```rust
-fn system_triggering_notifications(ios_notifications: NonSend<IosNotificationsResource>) {
+fn system_triggering_notifications(ios_notifications: IosNotifications) {
 
     // should be called after the permission response arrives
     ios_notifications.registered_for_push();
@@ -64,7 +64,7 @@ fn system_triggering_notifications(ios_notifications: NonSend<IosNotificationsRe
     ios_notifications.set_badge(1);
 
     // schedule a local notification
-    let id = IosNotificationsResource::schedule(
+    let id = ios_notifications.schedule(
         IosNotificationRequest::new()
             .title("title")
             .body("body")
@@ -79,7 +79,7 @@ fn system_triggering_notifications(ios_notifications: NonSend<IosNotificationsRe
 // this will clear the badge, the notification center and all pending ones
 fn process_occluded_events(
     mut e: MessageReader<WindowOccluded>,
-    ios_notifications: NonSend<IosNotificationsResource>,
+    ios_notifications: IosNotifications,
 ) {
     for ev in e.read() {
         if !ev.occluded {
