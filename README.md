@@ -40,7 +40,7 @@ cargo add bevy_ios_notifications
 or
 
 ```
-bevy_ios_notifications = { version = "0.8" }
+bevy_ios_notifications = { version = "0.9" }
 ```
 
 ### 2. Setup Plugin
@@ -134,7 +134,8 @@ fn process_notifications(
 
 |bevy|bevy\_ios\_notifications|
 |----|---|
-|0.19|0.7,0.8,main|
+|0.20|0.9,main|
+|0.19|0.7,0.8|
 |0.18|0.6|
 |0.17|0.5|
 |0.16|0.4|
